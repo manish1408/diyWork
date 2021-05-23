@@ -14,9 +14,7 @@ const PostDate = ({ date }) => {
   const displayDate = new Intl.DateTimeFormat('en-US', dateFormat).format(Date(date))
 
   return (
-    <p className="blog-post-meta">
-      <time className="created-at">{displayDate}</time>
-    </p>
+      <time>{displayDate}</time>
   )
 }
 

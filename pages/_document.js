@@ -12,17 +12,33 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          <meta charSet="utf-8" />
-          <link
-            href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900"
-            rel="stylesheet"
-          />
+          <meta charset="UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+          <link href="https://fonts.googleapis.com/css?family=Muli:300,400,500,600,700,800,900&amp;display=swap" rel="stylesheet" />
+
+          <link rel="stylesheet" href="./css/all.css" />
+          <link rel="stylesheet" href="./css/elegant-font-icons.css" />
+          <link rel="stylesheet" href="./css/bootstrap.min.css" />
+          <link rel="stylesheet" href="./css/owl.carousel.css" />
+          <link rel="stylesheet" href="./css/style.css" />
+          <link rel="stylesheet" href="./css/custom.css" />
           <link rel="icon" href="/favicon.png" type="image/png" />
         </Head>
         <body>
           <Main />
           <NextScript />
           <PrismicScript />
+          <script src="./js/jquery-3.5.0.min.js"></script>
+          <script src="./js/popper.min.js"></script>
+          <script src="./js/bootstrap.min.js"></script>
+
+          <script src="./js/ajax-contact.js"></script>
+          <script src="./js/owl.carousel.min.js"></script>
+          {/* <script src="./js/switch.js"></script> */}
+
+          <script src="./js/main.js"></script>
         </body>
       </Html>
     )

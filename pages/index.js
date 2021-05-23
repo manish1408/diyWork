@@ -5,7 +5,7 @@ import { RichText } from "prismic-reactjs";
 
 // Project components & functions
 import DefaultLayout from "layouts";
-import { Header, PostList, SetupRepo } from "components/home";
+import { Header, Footer, PostList, SetupRepo } from "components/home";
 import { Client } from "utils/prismicHelpers";
 
 /**
@@ -24,6 +24,11 @@ const Home = ({ doc, posts }) => {
           description={doc.data.description}
         />
         <PostList posts={posts} />
+        <Footer
+          image={doc.data.image}
+          headline={doc.data.headline}
+          description={doc.data.description}
+        />
       </DefaultLayout>
     );
   }

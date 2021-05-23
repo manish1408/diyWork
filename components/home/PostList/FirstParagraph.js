@@ -17,7 +17,7 @@ const FirstParagraph = ({ sliceZone, textLimit = 300 }) => {
       limitedText = `${limitedText.substring(0, limitedText.lastIndexOf(' '))}...`
     }
     
-    return <p>{limitedText}</p>
+    return <>{limitedText}</>
   }
 
   // If there are no slices of type 'text', return nothing
