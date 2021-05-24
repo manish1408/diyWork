@@ -19,13 +19,15 @@ const Home = ({ doc, posts }) => {
           <title>{RichText.asText(doc.data.headline)}</title>
         </Head>
         <Header
-          image={doc.data.image}
+          logoLight={doc.data.logolight}
+          logoDark={doc.data.logodark}
           headline={doc.data.headline}
           description={doc.data.description}
         />
         <PostList posts={posts} />
         <Footer
-          image={doc.data.image}
+          logoLight={doc.data.logoLight}
+          logoDark={doc.data.logoDark}
           headline={doc.data.headline}
           description={doc.data.description}
         />

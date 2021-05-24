@@ -5,7 +5,7 @@ import OwlCarousel from 'react-owl-carousel2';
 /**
  * Homepage header component
  */
-const Header = ({ image, headline, description }) => {
+const Header = ({ logoLight, logoDark, headline, description }) => {
   const options = {
     items: 1,
     nav: true,
@@ -16,33 +16,29 @@ const Header = ({ image, headline, description }) => {
     autoplay: false,
     navText: ["", ""]
   };
-
+  
   return (
     // <div className="home">
-    //   <div className="blog-avatar" style={{ backgroundImage: `url(${image.url})` }} />
+    //   <div className="blog-avatar" style={{ backgroundImage: `url()` }} />
     //   <h1 className="blog-title">{RichText.asText(headline)}</h1>
     //   <p className="blog-description">{RichText.asText(description)}</p>
     // </div>
-
-
+    
+    
     <div>
       <style jsx global>{headerStyles}</style>
       <div className="loading">
         <div className="circle" />
       </div>
 
-
       <nav className="navbar navbar-expand-lg fixed-top">
         <div className="container-fluid">
-          {/*logo*/}
           <div className="logo">
             <a href="index.html">
-              <img src="./img/logo-dark.png" alt="" className="logo-dark" />
-              <img src="./img/logo-white.png" alt="" className="logo-white" />
+              <img src={logoDark.url} alt={RichText.asText(headline)} className="logo-dark" />
+              <img src={logoLight.url} alt={RichText.asText(headline)} className="logo-white" />
             </a>
           </div>
-          {/*/*/}
-          {/*navbar-collapse*/}
           <div className="collapse navbar-collapse" id="main_nav">
             <ul className="navbar-nav ml-auto mr-auto">
               <li className="nav-item dropdown">
