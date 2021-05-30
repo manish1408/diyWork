@@ -28,7 +28,7 @@ const Header = ({ logoLight, logoDark, headline, description }) => {
     <div>
       <style jsx global>{headerStyles}</style>
       <div className="loading">
-        <div className="circle" />
+        <div className="circle" /> 
       </div>
 
       <nav className="navbar navbar-expand-lg fixed-top">
@@ -129,12 +129,12 @@ const Header = ({ logoLight, logoDark, headline, description }) => {
           {/*/*/}
           {/*navbar-right*/}
           <div className="navbar-right ml-auto">
-            <div className="theme-switch-wrapper">
+            {/* <div className="theme-switch-wrapper">
               <label className="theme-switch" htmlFor="checkbox">
                 <input type="checkbox" id="checkbox" />
                 <div className="slider round" />
               </label>
-            </div>
+            </div> */}
             <div className="social-icones">
               <ul className="list-inline">
                 <li>
@@ -150,11 +150,6 @@ const Header = ({ logoLight, logoDark, headline, description }) => {
                 <li>
                   <a href="#">
                     <i className="fab fa-twitter" />
-                  </a>
-                </li>
-                <li>
-                  <a href="#">
-                    <i className="fab fa-youtube" />
                   </a>
                 </li>
               </ul>

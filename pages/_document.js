@@ -15,6 +15,7 @@ class MyDocument extends Document {
           <meta charset="UTF-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+          <script src="./js/jquery-3.5.0.min.js"></script>
 
           <link href="https://fonts.googleapis.com/css?family=Muli:300,400,500,600,700,800,900&amp;display=swap" rel="stylesheet" />
 
@@ -30,12 +31,11 @@ class MyDocument extends Document {
           <Main />
           <NextScript />
           <PrismicScript />
-          <script src="./js/jquery-3.5.0.min.js"></script>
           <script src="./js/popper.min.js"></script>
           <script src="./js/bootstrap.min.js"></script>
 
           <script src="./js/ajax-contact.js"></script>
-          <script src="./js/owl.carousel.min.js"></script>
+          {/* <script src="./js/owl.carousel.min.js"></script> */}
           {/* <script src="./js/switch.js"></script> */}
 
           <script src="./js/main.js"></script>
