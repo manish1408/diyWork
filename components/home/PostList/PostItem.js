@@ -1,16 +1,18 @@
-import React from 'react'
-import { default as NextLink } from 'next/link'
-import { RichText } from 'prismic-reactjs'
+import React from "react";
+import Link from "next/link";
+import { RichText } from "prismic-reactjs";
 
-import PostDate from './PostDate'
-import FirstParagraph from './FirstParagraph'
-import { hrefResolver, linkResolver } from 'prismic-configuration'
+import PostDate from "./PostDate";
+import FirstParagraph from "./FirstParagraph";
+import { hrefResolver, linkResolver } from "prismic-configuration";
 
 /**
  * Post list item component
  */
 const PostItem = ({ post }) => {
-  const title = RichText.asText(post.data.title) ? RichText.asText(post.data.title) : 'Untitled'
+  const title = RichText.asText(post.data.title)
+    ? RichText.asText(post.data.title)
+    : "Untitled";
 
   return (
     // <div className="blog-post">
@@ -23,48 +25,58 @@ const PostItem = ({ post }) => {
     //     </a>
     //   </NextLink>
 
-    //   
-
+    //
 
     // </div>
     <div className="col-lg-4 col-md-6">
       {/*Post-1*/}
       <div className="post-card">
         <div className="post-card-image">
-          <a href={hrefResolver(post)}>
-            <img src="./img/blog/25.jpg" alt="" />
-          </a>
+          <Link as={linkResolver(post)} href={hrefResolver(post)}>
+            <a>
+              <img
+                src={post.data.imagepreview.url}
+                alt={post.data.imagepreview.alt}
+              />
+            </a>
+          </Link>
         </div>
         <div className="post-card-content">
-          <a href={hrefResolver(post)} className="categorie">Livestyle</a>
+          <a href={hrefResolver(post)} className="categorie">
+            Livestyle
+          </a>
           <h5>
-            <a href={hrefResolver(post)}>{title}</a>
+            <Link as={linkResolver(post)} href={hrefResolver(post)}>
+              <a>{title}</a>
+            </Link>
           </h5>
           <p>
-            <FirstParagraph
-              sliceZone={post.data.body}
-              textLimit={300}
-            />
+            <FirstParagraph sliceZone={post.data.body} textLimit={300} />
           </p>
           <div className="post-card-info">
             <ul className="list-inline">
               <li>
                 <a href="author.html">
-                  <img src="./img/author/1.jpg" alt="" />
+                  <img
+                    src={post.data.authorimage.url}
+                    alt={post.data.authorimage.url.alt}
+                  />
                 </a>
               </li>
               <li>
-                <a href="author.html">David Smith</a>
+                <a href="author.html">{post.data.authorname[0].text}</a>
               </li>
               <li className="dot" />
-              <li><PostDate date={post.data.date} /></li>
+              <li>
+                <PostDate date={post.data.date} />
+              </li>
             </ul>
           </div>
         </div>
       </div>
       {/*/*/}
     </div>
-  )
-}
+  );
+};
 
-export default PostItem
+export default PostItem;
