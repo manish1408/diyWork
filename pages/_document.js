@@ -39,6 +39,9 @@ class MyDocument extends Document {
           {/* <script src="./js/switch.js"></script> */}
 
           <script src="/js/main.js"></script>
+          <script src="https://diy-work.disqus.com/embed.js" async ></script>
+          <script id="dsq-count-scr" src="//diy-work.disqus.com/count.js" async></script>
+       
         </body>
       </Html>
     );
