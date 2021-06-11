@@ -883,7 +883,7 @@ input:checked + .slider:before {
 ----------------------------------- */
 .navbar {
   background-color: #ffffff;
-  padding: 15px 15px;
+  padding: 10px 15px;
 }
 
 .navbar-scroll {
@@ -894,7 +894,7 @@ input:checked + .slider:before {
 }
 
 .navbar .logo img {
-  max-height: 40px;
+  max-height: 52px;
 }
 
 .navbar .logo-white {
@@ -1884,7 +1884,7 @@ input:checked + .slider:before {
 .hero:after {
   position: absolute;
   content: "";
-  left: 0;
+  left: 3px;
   top: 0;
   width: 100%;
   height: 100%;

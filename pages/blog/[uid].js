@@ -201,7 +201,7 @@ const Post = ({ post, doc }) => {
                 </div>
               </div>
               <div className="col-lg-4 max-width">
-                {/*widget-author*/}
+{/*                 
                 <div className="widget">
                   <div className="widget-author">
                     <a href="author.html" className="image">
@@ -246,7 +246,10 @@ const Post = ({ post, doc }) => {
                     </div>
                   </div>
                 </div>
-                {/*/*/}
+                
+
+
+                 */}
                 {/*widget-latest-posts*/}
                 <div className="widget ">
                   <div className="section-title">
