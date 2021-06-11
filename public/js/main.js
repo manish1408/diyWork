@@ -43,9 +43,9 @@ Table of Content
   $(".search-icon").on("click", function () {
     $(".search").addClass("search-open");
   });
-  $(".close").on("click", function () {
-    $(".search").removeClass("search-open");
-  });
+  // $(".close").on("click", function () {
+  //   $(".search").removeClass("search-open");
+  // });
 
   /* -----------------------------------
            Back-top

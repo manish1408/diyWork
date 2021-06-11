@@ -1,7 +1,8 @@
-import React from "react";
+import React, { Component } from "react";
 import { RichText } from "prismic-reactjs";
 // import { headerStyles } from "styles";
 import Link from "next/link";
+import SearchComponent from "../SearchComponent";
 // import OwlCarousel from "react-owl-carousel2";
 /**
  * Homepage header component
@@ -333,25 +334,7 @@ const Header = ({ logoLight, logoDark, headline, description }) => {
         </section>
       </div>
 
-      <div className="search">
-        <div className="container-fluid">
-          <div className="search-width  text-center">
-            <button type="button" className="close">
-              <i className="icon_close" />
-            </button>
-            <form className="search-form" action="#">
-              <input
-                type="search"
-                defaultValue
-                placeholder="What are you looking for?"
-              />
-              <button type="submit" className="search-btn">
-                search
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
+      <SearchComponent />
     </div>
   );
 };
