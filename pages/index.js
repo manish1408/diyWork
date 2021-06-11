@@ -49,7 +49,7 @@ const Home = ({ doc, posts, slides }) => {
                   }}
                 >
                   <div className="row">
-                    <div className="col-8 offset-4">
+                    <div className="col-8 offset-2">
                       <div className="hero-content">
                         <a href="" className="categorie">
                           travel

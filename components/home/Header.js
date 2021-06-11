@@ -38,7 +38,7 @@ const Header = ({ logoLight, logoDark, headline, description }) => {
         <div className="container-fluid">
           <div className="logo">
             <Link href="/">
-              <a href="index.html">
+              <a href="/">
                 <img
                   src={logoDark.url}
                   alt={RichText.asText(headline)}
@@ -57,7 +57,7 @@ const Header = ({ logoLight, logoDark, headline, description }) => {
               <li className="nav-item dropdown">
                 <a
                   className="nav-link dropdown-toggle active"
-                  href="index.html"
+                  href="/"
                   data-toggle="dropdown"
                 >
                   {" "}
@@ -65,7 +65,7 @@ const Header = ({ logoLight, logoDark, headline, description }) => {
                 </a>
                 <ul className="dropdown-menu fade-up">
                   <li>
-                    <a className="dropdown-item" href="index.html">
+                    <a className="dropdown-item" href="/">
                       Demo 1
                     </a>
                   </li>
