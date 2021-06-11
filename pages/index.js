@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import Prismic from "@prismicio/client";
 import { RichText } from "prismic-reactjs";
@@ -8,12 +8,32 @@ import OwlCarousel from "react-owl-carousel2";
 import DefaultLayout from "layouts";
 import { Header, Footer, PostList, SetupRepo } from "components/home";
 import { Client } from "utils/prismicHelpers";
+import ReactPaginate from "react-paginate";
 
 /**
  * Homepage component
  */
-const Home = ({ doc, posts, slides }) => {
-  console.log(slides);
+const Home = ({ doc, posts, slides, pages }) => {
+  const [otherPage, setOtherPage] = useState(posts);
+
+  const pagginationHandler = (page) => {
+    const pageNumber = page.selected + 1;
+    Client()
+      .query(Prismic.Predicates.at("document.type", "post"), {
+        pageSize: 20,
+        page: pageNumber,
+      })
+      .then((response) => {
+        setOtherPage(response.results);
+      });
+  };
+
+  useEffect(() => {
+    // Update the document title using the browser API
+    otherPage;
+  });
+
+  // console.log(postData);
   if (doc && doc.data) {
     const options = {
       items: 1,
@@ -62,51 +82,56 @@ const Home = ({ doc, posts, slides }) => {
                   </div>
                 </div>
               ))}
-
-              {/* <div
-              className="hero d-flex align-items-center "
-              style={{ backgroundImage: 'url("./img/hero/1.jpg")' }}
-            >
-              <div className="row">
-                <div className="col-8 offset-4">
-                  <div className="hero-content text-center">
-                    <a href="" className="categorie">
-                      travel
-                    </a>
-                    <h2>
-                      <a href="">
-                        10 Best and Most Beautiful Places to Visit in Italy{" "}
-                      </a>
-                    </h2>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div
-              className="hero d-flex align-items-center "
-              style={{ backgroundImage: 'url("./img/hero/2.jpg")' }}
-            >
-              <div className="row">
-                <div className="col-8 offset-4">
-                  <div className="hero-content">
-                    <a href="" className="categorie">
-                      travel
-                    </a>
-                    <h2>
-                      <a href="">
-                        10 Best and Most Beautiful Places to Visit in Italy{" "}
-                      </a>
-                    </h2>
-                  </div>
-                </div>
-              </div>
-            </div> */}
             </OwlCarousel>
           </section>
         </div>
 
-        <PostList posts={posts} />
+        <section className="mt-80">
+          <div className="container-fluid">
+            <div className="row">
+              <PostList posts={otherPage} />
+              {/*pagination*/}
+
+              <div className="col-lg-12">
+                <div className="pagination mt--10">
+                  <ul className="list-inline">
+                    {/* <p>{JSON.stringify(otherPage)}</p> */}
+                    <ReactPaginate
+                      previousLabel={<i className="arrow_carrot-2left" />}
+                      nextLabel={<i className="arrow_carrot-2right" />}
+                      breakLabel={<i className="fas fa-exchange-alt"></i>}
+                      pageLinkClassName={"page_link"}
+                      activeClassName={"active"}
+                      pageCount={pages} //page count
+                      marginPagesDisplayed={2}
+                      pageRangeDisplayed={5}
+                      onPageChange={pagginationHandler}
+                    />
+                    {/* <li className="active">
+                      <a href="#">1</a>
+                    </li>
+                    <li>
+                      <a href="#">2</a>
+                    </li>
+                    <li>
+                      <a href="#">3</a>
+                    </li>
+                    <li>
+                      <a href="#">4</a>
+                    </li>
+                    <li>
+                      <a href="#">
+                        <i className="arrow_carrot-2right" />
+                      </a>
+                    </li> */}
+                  </ul>
+                </div>
+                {/*/*/}
+              </div>
+            </div>
+          </div>
+        </section>
+
         <Footer
           logoLight={doc.data.logoLight}
           logoDark={doc.data.logoDark}
@@ -121,9 +146,23 @@ const Home = ({ doc, posts, slides }) => {
   return <SetupRepo />;
 };
 
+// async function pagginationHandler(page) {
+//   const pageNumber = page.selected + 1;
+//   console.log(pageNumber);
+//   const otherPage =
+//     (await Client().query(Prismic.Predicates.at("document.type", "post"), {
+//       page: 1,
+//     })) || {};
+
+//   return {
+//     props: {
+//       otherPage,
+//     },
+//   };
+// }
+
 export async function getStaticProps({ preview = null, previewData = {} }) {
   const { ref } = previewData;
-
   const client = Client();
   const slideIds = [];
 
@@ -133,9 +172,15 @@ export async function getStaticProps({ preview = null, previewData = {} }) {
     Prismic.Predicates.at("document.type", "post"),
     {
       orderings: "[my.post.date desc]",
+      pageSize: 20,
       ...(ref ? { ref } : null),
     }
   );
+
+  const pages = posts.total_pages;
+
+  // const doc = (await client.query(Prismic.Predicates.at('document.type', 'post'),
+  // { page : 3 })) || {};
 
   doc.data.slider.map((slide) => slideIds.push(slide.banner_posts.id));
 
@@ -145,6 +190,7 @@ export async function getStaticProps({ preview = null, previewData = {} }) {
     props: {
       slides: slides ? slides.results : [],
       doc,
+      pages,
       posts: posts ? posts.results : [],
       preview,
     },

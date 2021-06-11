@@ -1,6 +1,8 @@
 import React from "react";
 import Head from "next/head";
 import { RichText } from "prismic-reactjs";
+import Prismic from "@prismicio/client";
+import { hrefResolver, linkResolver } from "prismic-configuration";
 
 import { queryRepeatableDocuments } from "utils/queries";
 
@@ -13,16 +15,16 @@ import { Client } from "utils/prismicHelpers";
 import { postStyles } from "styles";
 import PostDate from "../../components/home/PostList/PostDate";
 import { Header, Footer } from "components/home";
+import Link from "next/link";
 
 /**
  * Post page component
  */
-const Post = ({ post, doc }) => {
+const Post = ({ post, doc, postList, recentPosts }) => {
+  console.log(recentPosts);
   if (post && post.data) {
     const hasTitle = RichText.asText(post.data.title).length !== 0;
     const title = hasTitle ? RichText.asText(post.data.title) : "Untitled";
-
-    console.log(post);
 
     function getId(url) {
       const regExp =
@@ -90,21 +92,11 @@ const Post = ({ post, doc }) => {
                   <div className="post-single-footer">
                     {/* <div className="tags">
                       <ul className="list-inline">
-                        <li>
-                          <a href="blog-grid.html">Travel</a>
-                        </li>
-                        <li>
-                          <a href="blog-grid.html">Nature</a>
-                        </li>
-                        <li>
-                          <a href="blog-grid.html">tips</a>
-                        </li>
-                        <li>
-                          <a href="blog-grid.html">forest</a>
-                        </li>
-                        <li>
-                          <a href="blog-grid.html">beach</a>
-                        </li>
+                        {post.tags.length !== 0 ? (
+                          post.tags.map((tag, key) => <li key={key}>{tag}</li>)
+                        ) : (
+                          <></>
+                        )}
                       </ul>
                     </div> */}
                     <div className="social-media">
@@ -141,54 +133,105 @@ const Post = ({ post, doc }) => {
                 {/*/*/}
                 {/*next & previous-posts*/}
                 <div className="row">
-                  <div className="col-md-6">
-                    <div className="widget">
-                      <div className="widget-next-post">
-                        <div className="small-post">
-                          <div className="image">
-                            <a href="post-default.html">
-                              <img src="assets/img/latest/1.jpg" alt="..." />
-                            </a>
-                          </div>
-                          <div className="content">
-                            <div>
-                              <a className="link" href="post-default.html">
-                                <i className="arrow_left" />
-                                Preview post
-                              </a>
+                  {postList.results.length !== 0 ? (
+                    <div className="col-md-6">
+                      <div className="widget">
+                        <div className="widget-next-post">
+                          <div className="small-post">
+                            <div className="image">
+                              <Link
+                                as={linkResolver(postList.results[0])}
+                                href={hrefResolver(postList.results[0])}
+                              >
+                                <a>
+                                  <img
+                                    src={
+                                      postList.results[0].data.imagepreview.url
+                                    }
+                                    alt={
+                                      postList.results[0].data.imagepreview.alt
+                                    }
+                                  />
+                                </a>
+                              </Link>
                             </div>
-                            <a href="post-default.html">
-                              7 Healty Dinner Recipes for a Date Night at Home
-                            </a>
+                            <div className="content">
+                              <div>
+                                <Link
+                                  as={linkResolver(postList.results[0])}
+                                  href={hrefResolver(postList.results[0])}
+                                >
+                                  <a className="link">
+                                    <i className="arrow_left" />
+                                    Preview post
+                                  </a>
+                                </Link>
+                              </div>
+                              <Link
+                                as={linkResolver(postList.results[0])}
+                                href={hrefResolver(postList.results[0])}
+                              >
+                                <a>{postList.results[0].data.title[0].text}</a>
+                              </Link>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="widget">
-                      <div className="widget-previous-post">
-                        <div className="small-post">
-                          <div className="image">
-                            <a href="post-default.html">
-                              <img src="assets/img/blog/2.jpg" alt="..." />
-                            </a>
-                          </div>
-                          <div className="content">
-                            <div>
-                              <a className="link" href="post-default.html">
-                                <span> Next post</span>
-                                <span className="arrow_right" />
-                              </a>
+                  ) : (
+                    <></>
+                  )}
+
+                  {postList.results.length !== 0 && postList.results[1] ? (
+                    <div className="col-md-6">
+                      <div className="widget">
+                        <div className="widget-previous-post">
+                          <div className="small-post">
+                            <div className="image">
+                              <Link
+                                as={linkResolver(postList.results[1])}
+                                href={hrefResolver(postList.results[1])}
+                              >
+                                <a>
+                                  <img
+                                    src={
+                                      postList.results[1].data.imagepreview.url
+                                    }
+                                    alt={
+                                      postList.results[1].data.imagepreview.alt
+                                    }
+                                  />
+                                </a>
+                              </Link>
                             </div>
-                            <a href="post-default.html">
-                              How to Choose Outfits for Work for woman and men
-                            </a>
+                            <div className="content">
+                              <div>
+                                <Link
+                                  as={linkResolver(postList.results[1])}
+                                  href={hrefResolver(postList.results[1])}
+                                >
+                                  <a className="link">
+                                    <span> Next post</span>
+                                    <span className="arrow_right" />
+                                  </a>
+                                </Link>
+                              </div>
+                              <Link
+                                as={linkResolver(postList.results[1])}
+                                href={hrefResolver(postList.results[1])}
+                              >
+                                <a href="post-default.html">
+                                  {postList.results[1].data.title[0].text}
+                                </a>
+                              </Link>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
+                  ) : (
+                    <></>
+                  )}
                 </div>
                 {/*/*/}
                 {/*widget-comments*/}
@@ -197,11 +240,10 @@ const Post = ({ post, doc }) => {
                     <h5>Comments</h5>
                   </div>
                   <div id="disqus_thread"></div>
-
                 </div>
               </div>
               <div className="col-lg-4 max-width">
-{/*                 
+                {/*                 
                 <div className="widget">
                   <div className="widget-author">
                     <a href="author.html" className="image">
@@ -256,25 +298,42 @@ const Post = ({ post, doc }) => {
                     <h5>Latest Posts</h5>
                   </div>
                   <ul className="widget-latest-posts">
-                    <li className="last-post">
-                      <div className="image">
-                        <a href="post-default.html">
-                          <img src="assets/img/latest/1.jpg" alt="..." />
-                        </a>
-                      </div>
-                      <div className="nb">1</div>
-                      <div className="content">
-                        <p>
-                          <a href="post-default.html">
-                            5 Things I Wish I Knew Before Traveling to Malaysia
-                          </a>
-                        </p>
-                        <small>
-                          <span className="icon_clock_alt" /> January 15, 2021
-                        </small>
-                      </div>
-                    </li>
-                    <li className="last-post">
+                    {recentPosts.results.map((recentPost) => (
+                      <li key={recentPost.id} className="last-post">
+                        <div className="image">
+                          <Link
+                            as={linkResolver(recentPost)}
+                            href={hrefResolver(recentPost)}
+                          >
+                            <a>
+                              <img
+                                src={recentPost.data.imagepreview.url}
+                                alt={recentPost.data.imagepreview.alt}
+                              />
+                            </a>
+                          </Link>
+                        </div>
+                        {/* <div className="nb">1</div> */}
+                        <div className="content">
+                          <p>
+                            <Link
+                              as={linkResolver(recentPost)}
+                              href={hrefResolver(recentPost)}
+                            >
+                              <a href="post-default.html">
+                                {recentPost.data.title[0].text}
+                              </a>
+                            </Link>
+                          </p>
+                          <small>
+                            <span className="icon_clock_alt" />{" "}
+                            <PostDate date={recentPost.data.date} />
+                          </small>
+                        </div>
+                      </li>
+                    ))}
+
+                    {/* <li className="last-post">
                       <div className="image">
                         <a href="post-default.html">
                           <img src="assets/img/latest/2.jpg" alt="..." />
@@ -328,7 +387,7 @@ const Post = ({ post, doc }) => {
                           <span className="icon_clock_alt" /> January 15, 2021
                         </small>
                       </div>
-                    </li>
+                    </li> */}
                   </ul>
                 </div>
                 {/*/*/}
@@ -411,36 +470,11 @@ const Post = ({ post, doc }) => {
                   </div>
                   <div className="widget-tags">
                     <ul className="list-inline">
-                      <li>
-                        <a href="blog-grid.html">Travel</a>
-                      </li>
-                      <li>
-                        <a href="blog-grid.html">Nature</a>
-                      </li>
-                      <li>
-                        <a href="blog-grid.html">tips</a>
-                      </li>
-                      <li>
-                        <a href="blog-grid.html">forest</a>
-                      </li>
-                      <li>
-                        <a href="blog-grid.html">beach</a>
-                      </li>
-                      <li>
-                        <a href="blog-grid.html">fashion</a>
-                      </li>
-                      <li>
-                        <a href="blog-grid.html">livestyle</a>
-                      </li>
-                      <li>
-                        <a href="blog-grid.html">healty</a>
-                      </li>
-                      <li>
-                        <a href="blog-grid.html">food</a>
-                      </li>
-                      <li>
-                        <a href="blog-grid.html">breakfast</a>
-                      </li>
+                      {post.tags.length !== 0 ? (
+                        post.tags.map((tag, key) => <li key={key}>{tag}</li>)
+                      ) : (
+                        <></>
+                      )}
                     </ul>
                   </div>
                 </div>
@@ -478,11 +512,28 @@ export async function getStaticProps({
     (await Client().getSingle("blog_home", ref ? { ref } : null)) || {};
   const post =
     (await Client().getByUID("post", params.uid, ref ? { ref } : null)) || {};
+
+  const recentPosts =
+    (await Client().query(Prismic.Predicates.at("document.type", "post"), {
+      orderings: "[document.last_publication_date desc]",
+      pageSize: 5,
+    })) || {};
+
+  const postList =
+    (await Client().query(Prismic.Predicates.at("document.type", "post"), {
+      pageSize: 2,
+      after: `${post.id}`,
+      orderings: "[my.post.date]",
+      ...(ref ? { ref } : null),
+    })) || {};
+
   return {
     props: {
       preview,
       post,
+      postList,
       doc,
+      recentPosts,
     },
   };
 }
