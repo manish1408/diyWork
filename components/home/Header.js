@@ -129,7 +129,7 @@ const Header = ({ logoLight, logoDark, headline, description }) => {
               <li className="nav-item dropdown">
                 <a
                   className="nav-link  dropdown-toggle"
-                  href="post-default.html"
+                  
                   data-toggle="dropdown"
                 >
                   {" "}
@@ -137,7 +137,7 @@ const Header = ({ logoLight, logoDark, headline, description }) => {
                 </a>
                 <ul className="dropdown-menu fade-up">
                   <li>
-                    <a className="dropdown-item" href="post-default.html">
+                    <a className="dropdown-item" >
                       {" "}
                       post default
                     </a>

@@ -16,6 +16,8 @@ import { postStyles } from "styles";
 import PostDate from "../../components/home/PostList/PostDate";
 import { Header, Footer } from "components/home";
 import Link from "next/link";
+import CommentsComponent from "../../components/CommentsComponent";
+
 
 /**
  * Post page component
@@ -71,7 +73,7 @@ const Post = ({ post, doc, postList, recentPosts }) => {
                       <ul className="list-inline">
                         <li>
                           <a href="author.html">
-                            <img src={post.data.authorimage.url} alt />
+                            <img src={post.data.authorimage.url} alt="Image" />
                           </a>
                         </li>
                         <li>
@@ -220,7 +222,7 @@ const Post = ({ post, doc, postList, recentPosts }) => {
                                 as={linkResolver(postList.results[1])}
                                 href={hrefResolver(postList.results[1])}
                               >
-                                <a href="post-default.html">
+                                <a>
                                   {postList.results[1].data.title[0].text}
                                 </a>
                               </Link>
@@ -236,10 +238,7 @@ const Post = ({ post, doc, postList, recentPosts }) => {
                 {/*/*/}
                 {/*widget-comments*/}
                 <div className="widget mb-50">
-                  <div className="title">
-                    <h5>Comments</h5>
-                  </div>
-                  <div id="disqus_thread"></div>
+                 <CommentsComponent></CommentsComponent>
                 </div>
               </div>
               <div className="col-lg-4 max-width">
@@ -247,7 +246,7 @@ const Post = ({ post, doc, postList, recentPosts }) => {
                 <div className="widget">
                   <div className="widget-author">
                     <a href="author.html" className="image">
-                      <img src="assets/img/author/1.jpg" alt />
+                      <img src="assets/img/author/1.jpg" alt="image" />
                     </a>
                     <h6>
                       <span>Hi, I'm David Smith</span>
@@ -320,7 +319,7 @@ const Post = ({ post, doc, postList, recentPosts }) => {
                               as={linkResolver(recentPost)}
                               href={hrefResolver(recentPost)}
                             >
-                              <a href="post-default.html">
+                              <a>
                                 {recentPost.data.title[0].text}
                               </a>
                             </Link>
@@ -335,14 +334,14 @@ const Post = ({ post, doc, postList, recentPosts }) => {
 
                     {/* <li className="last-post">
                       <div className="image">
-                        <a href="post-default.html">
+                        <a>
                           <img src="assets/img/latest/2.jpg" alt="..." />
                         </a>
                       </div>
                       <div className="nb">2</div>
                       <div className="content">
                         <p>
-                          <a href="post-default.html">
+                          <a >
                             Everything you need to know about visiting the
                             Amazon.
                           </a>
@@ -354,14 +353,14 @@ const Post = ({ post, doc, postList, recentPosts }) => {
                     </li>
                     <li className="last-post">
                       <div className="image">
-                        <a href="post-default.html">
+                        <a >
                           <img src="assets/img/latest/3.jpg" alt="..." />
                         </a>
                       </div>
                       <div className="nb">3</div>
                       <div className="content">
                         <p>
-                          <a href="post-default.html">
+                          <a >
                             How to spend interesting vacation after hard work?
                           </a>
                         </p>
@@ -372,14 +371,14 @@ const Post = ({ post, doc, postList, recentPosts }) => {
                     </li>
                     <li className="last-post">
                       <div className="image">
-                        <a href="post-default.html">
+                        <a >
                           <img src="assets/img/latest/4.jpg" alt="..." />
                         </a>
                       </div>
                       <div className="nb">4</div>
                       <div className="content">
                         <p>
-                          <a href="post-default.html">
+                          <a >
                             10 Best and Most Beautiful Places to Visit in Italy
                           </a>
                         </p>
@@ -432,32 +431,32 @@ const Post = ({ post, doc, postList, recentPosts }) => {
                   <ul className="widget-instagram">
                     <li>
                       <a className="image" href="#">
-                        <img src="assets/img/instagram/1.jpg" alt />
+                        <img src="../../img/instagram/1.jpg" alt="Images" />
                       </a>
                     </li>
                     <li>
                       <a className="image" href="#">
-                        <img src="assets/img/instagram/2.jpg" alt />
+                        <img src="../../img/instagram/2.jpg" alt="Images" />
                       </a>
                     </li>
                     <li>
                       <a className="image" href="#">
-                        <img src="assets/img/instagram/3.jpg" alt />
+                        <img src="../../img/instagram/3.jpg" alt="Images" />
                       </a>
                     </li>
                     <li>
                       <a className="image" href="#">
-                        <img src="assets/img/instagram/4.jpg" alt />
+                        <img src="../../img/instagram/4.jpg" alt="Images" />
                       </a>
                     </li>
                     <li>
                       <a className="image" href="#">
-                        <img src="assets/img/instagram/5.jpg" alt />
+                        <img src="../../img/instagram/5.jpg" alt="Images" />
                       </a>
                     </li>
                     <li>
                       <a className="image" href="#">
-                        <img src="assets/img/instagram/6.jpg" alt />
+                        <img src="../../img/instagram/6.jpg" alt="Images" />
                       </a>
                     </li>
                   </ul>

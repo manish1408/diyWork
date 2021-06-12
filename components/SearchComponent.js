@@ -19,7 +19,7 @@ class SearchComponent extends React.Component {
     };
   }
 
-  componentDidUpdate() {}
+  componentDidUpdate() { }
 
   toggle() {
     this.setState({ addClass: !this.state.addClass });
@@ -87,7 +87,7 @@ class SearchComponent extends React.Component {
                     </h6>
                     <div className="image-wrapper">
                       <img
-                        className="image"
+                        className="image img-search-result"
                         src={result.data.imagepreview.url}
                         alt="image"
                       />
