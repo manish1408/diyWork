@@ -1,15 +1,21 @@
-import React from 'react'
-import { default as NextLink } from 'next/link'
+import React from "react";
+import { default as NextLink } from "next/link";
 
 /**
  * Post back button component
  */
-const BackButton = () => (
+const BackButton = ({ link }) => (
   <div className="back">
-    <NextLink href="/">
-      <a>back to list</a>
-    </NextLink>
+    <div className="pagination mt--10">
+      <ul className="list-inline">
+        <NextLink href={link}>
+          <a>
+            <i className="arrow_carrot-2right" />
+          </a>
+        </NextLink>
+      </ul>
+    </div>
   </div>
-)
+);
 
-export default BackButton
+export default BackButton;

@@ -16,14 +16,15 @@ import { postStyles } from "styles";
 import PostDate from "../../components/home/PostList/PostDate";
 import { Header, Footer } from "components/home";
 import Link from "next/link";
+import { hrefResolverCat, linkResolverCat } from "../../prismic-configuration";
 import CommentsComponent from "../../components/CommentsComponent";
-
+// import Category from "../categories";
 
 /**
  * Post page component
  */
-const Post = ({ post, doc, postList, recentPosts }) => {
-  console.log(recentPosts);
+const Post = ({ post, doc, postList, recentPosts, categories }) => {
+  // console.log(categories);
   if (post && post.data) {
     const hasTitle = RichText.asText(post.data.title).length !== 0;
     const title = hasTitle ? RichText.asText(post.data.title) : "Untitled";
@@ -222,9 +223,7 @@ const Post = ({ post, doc, postList, recentPosts }) => {
                                 as={linkResolver(postList.results[1])}
                                 href={hrefResolver(postList.results[1])}
                               >
-                                <a>
-                                  {postList.results[1].data.title[0].text}
-                                </a>
+                                <a>{postList.results[1].data.title[0].text}</a>
                               </Link>
                             </div>
                           </div>
@@ -238,7 +237,7 @@ const Post = ({ post, doc, postList, recentPosts }) => {
                 {/*/*/}
                 {/*widget-comments*/}
                 <div className="widget mb-50">
-                 <CommentsComponent></CommentsComponent>
+                  {/* <CommentsComponent></CommentsComponent> */}
                 </div>
               </div>
               <div className="col-lg-4 max-width">
@@ -294,7 +293,7 @@ const Post = ({ post, doc, postList, recentPosts }) => {
                 {/*widget-latest-posts*/}
                 <div className="widget ">
                   <div className="section-title">
-                    <h5>Latest Posts</h5>
+                    <h5>Latest Updates</h5>
                   </div>
                   <ul className="widget-latest-posts">
                     {recentPosts.results.map((recentPost) => (
@@ -319,9 +318,7 @@ const Post = ({ post, doc, postList, recentPosts }) => {
                               as={linkResolver(recentPost)}
                               href={hrefResolver(recentPost)}
                             >
-                              <a>
-                                {recentPost.data.title[0].text}
-                              </a>
+                              <a>{recentPost.data.title[0].text}</a>
                             </Link>
                           </p>
                           <small>
@@ -331,62 +328,6 @@ const Post = ({ post, doc, postList, recentPosts }) => {
                         </div>
                       </li>
                     ))}
-
-                    {/* <li className="last-post">
-                      <div className="image">
-                        <a>
-                          <img src="assets/img/latest/2.jpg" alt="..." />
-                        </a>
-                      </div>
-                      <div className="nb">2</div>
-                      <div className="content">
-                        <p>
-                          <a >
-                            Everything you need to know about visiting the
-                            Amazon.
-                          </a>
-                        </p>
-                        <small>
-                          <span className="icon_clock_alt" /> January 15, 2021
-                        </small>
-                      </div>
-                    </li>
-                    <li className="last-post">
-                      <div className="image">
-                        <a >
-                          <img src="assets/img/latest/3.jpg" alt="..." />
-                        </a>
-                      </div>
-                      <div className="nb">3</div>
-                      <div className="content">
-                        <p>
-                          <a >
-                            How to spend interesting vacation after hard work?
-                          </a>
-                        </p>
-                        <small>
-                          <span className="icon_clock_alt" /> January 15, 2021
-                        </small>
-                      </div>
-                    </li>
-                    <li className="last-post">
-                      <div className="image">
-                        <a >
-                          <img src="assets/img/latest/4.jpg" alt="..." />
-                        </a>
-                      </div>
-                      <div className="nb">4</div>
-                      <div className="content">
-                        <p>
-                          <a >
-                            10 Best and Most Beautiful Places to Visit in Italy
-                          </a>
-                        </p>
-                        <small>
-                          <span className="icon_clock_alt" /> January 15, 2021
-                        </small>
-                      </div>
-                    </li> */}
                   </ul>
                 </div>
                 {/*/*/}
@@ -396,13 +337,19 @@ const Post = ({ post, doc, postList, recentPosts }) => {
                     <h5>Categories</h5>
                   </div>
                   <ul className="widget-categories">
-                    <li>
-                      <a href="#" className="categorie">
-                        Livestyle
-                      </a>
-                      <span className="ml-auto">22 Posts</span>
-                    </li>
-                    <li>
+                    {categories.results.map((category) => (
+                      <li key={category.id}>
+                        <Link
+                          as={linkResolverCat(category)}
+                          href={hrefResolverCat(category)}
+                        >
+                          <a className="categorie">{category.data.name}</a>
+                        </Link>
+                        {/* <span className="ml-auto">{category.data.description}</span> */}
+                      </li>
+                    ))}
+
+                    {/* <li>
                       <a href="#" className="categorie">
                         Travel
                       </a>
@@ -419,7 +366,7 @@ const Post = ({ post, doc, postList, recentPosts }) => {
                         fashion
                       </a>
                       <span className="ml-auto">10 Posts</span>
-                    </li>
+                    </li> */}
                   </ul>
                 </div>
                 {/*/*/}
@@ -518,6 +465,11 @@ export async function getStaticProps({
       pageSize: 5,
     })) || {};
 
+  const categories =
+    (await Client().query(
+      Prismic.Predicates.at("document.type", "category")
+    )) || {};
+
   const postList =
     (await Client().query(Prismic.Predicates.at("document.type", "post"), {
       pageSize: 2,
@@ -532,6 +484,7 @@ export async function getStaticProps({
       post,
       postList,
       doc,
+      categories,
       recentPosts,
     },
   };

@@ -2883,3 +2883,22 @@ img.avatar {
 .fs-12px {
   font-size: 12px;
 }
+
+.back_button {
+  float: left;
+  padding-bottom: 0px !important;
+}
+
+.back_button a {
+  color: #ff0835 !important;
+  display: block;
+  height: 33px;
+}
+
+.back_button a:hover {
+  color: #fff !important;
+}
+
+/* .back_button li:hover {
+  background-color: #ff0835;
+} */
