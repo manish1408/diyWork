@@ -1,7 +1,7 @@
 {
-  "name": "nextjs-blog",
-  "description": "Sample blog built with Next.js using Prismic headless CMS",
-  "author": "Prismic",
+  "name": "diywork-blog",
+  "description": "Headless CMS blog",
+  "author": "Manish Gautam",
   "dependencies": {
     "@prismicio/client": "^4.0.0",
     "@react-firebase/auth": "^0.2.10",
@@ -24,6 +24,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/prismicio/nextjs-blog"
+    "url": "https://github.com/manish1408/diyWork",
+    "version" : "1.0.1"
   }
 }
