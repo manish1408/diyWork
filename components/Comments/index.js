@@ -1,166 +1,49 @@
-import React from "react";
+// import React, { Component } from "react";
+import { useStateValue } from "../../utils/StateProvider";
+import CommentComponent from "./CommentComponent";
+import Input from "./Input";
+import Login from "./Login";
+import db from "../../utils/firebase";
+import { useState, useEffect } from "react";
 
-function comments() {
+function comments({ uid }) {
+  const [{ user }, dispatch] = useStateValue();
+  const [comments, setComments] = useState([]);
+
+  useEffect(() => {
+    db.collection(uid)
+      .orderBy("time", "desc")
+      .onSnapshot((snapshot) => {
+        setComments(
+          snapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() }))
+        );
+      });
+  }, []);
   return (
     <>
-      <div className="col-lg-8 mb-20">
-        <div className="widget mb-50">
-          <div className="title">
-            <h5>3 Comments</h5>
-          </div>
-          <ul className="widget-comments">
-            <li className="comment-item">
-              <img src="assets/img/user/1.jpg" alt />
-              <div className="content">
-                <ul className="info list-inline">
-                  <li>Mohammed Ali</li>
-                  <li className="dot" />
-                  <li> January 15, 2021</li>
-                </ul>
-                <p>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                  Repellendus at doloremque adipisci eum placeat quod non fugiat
-                  aliquid sit similique!
-                </p>
-                <div>
-                  <a href="#" className="link">
-                    {" "}
-                    <i className="arrow_back" /> Reply
-                  </a>
-                </div>
-              </div>
-            </li>
-            <li className="comment-item">
-              <img src="assets/img/author/1.jpg" alt />
-              <div className="content">
-                <ul className="info list-inline">
-                  <li>Simon Albert</li>
-                  <li className="dot" />
-                  <li> January 15, 2021</li>
-                </ul>
-                <p>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                  Repellendus at doloremque adipisci eum placeat quod non fugiat
-                  aliquid sit similique!
-                </p>
-                <div>
-                  <a href="#" className="link">
-                    <i className="arrow_back" /> Reply
-                  </a>
-                </div>
-              </div>
-            </li>
-            <li className="comment-item">
-              <img src="assets/img/user/2.jpg" alt />
-              <div className="content">
-                <ul className="info list-inline">
-                  <li>Adam bobly</li>
-                  <li className="dot" />
-                  <li> January 15, 2021</li>
-                </ul>
-                <p>
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                  Repellendus at doloremque adipisci eum placeat quod non fugiat
-                  aliquid sit similique!
-                </p>
-                <div>
-                  <a href="#" className="link">
-                    <i className="arrow_back" /> Reply
-                  </a>
-                </div>
-              </div>
-            </li>
-          </ul>
-          {/*Leave-comments*/}
-          <div className="title">
-            <h5>Leave a Reply</h5>
-          </div>
-          <form
-            className="widget-form"
-            action="#"
-            method="POST"
-            id="main_contact_form"
-          >
-            <p>
-              Your email adress will not be published ,Requied fileds are
-              marked*.
-            </p>
-            <div
-              className="alert alert-success contact_msg"
-              style={{ display: "none" }}
-              role="alert"
-            >
-              Your message was sent successfully.
+      <div className="row">
+        <div className="col-lg-12 mb-20">
+          <div className="widget mb-50">
+            <div className="title">
+              <h5>{comments.length + " Comments"}</h5>
             </div>
-            <div className="row">
-              <div className="col-md-12">
-                <div className="form-group">
-                  <textarea
-                    name="message"
-                    id="message"
-                    cols={30}
-                    rows={5}
-                    className="form-control"
-                    placeholder="Message*"
-                    required="required"
-                    defaultValue={""}
-                  />
-                </div>
-              </div>
-              <div className="col-md-6">
-                <div className="form-group">
-                  <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    className="form-control"
-                    placeholder="Name*"
-                    required="required"
-                  />
-                </div>
-              </div>
-              <div className="col-md-6">
-                <div className="form-group">
-                  <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    className="form-control"
-                    placeholder="Email*"
-                    required="required"
-                  />
-                </div>
-              </div>
-              <div className="col-12 mb-20">
-                <div className="form-group">
-                  <input
-                    type="text"
-                    name="website"
-                    id="website"
-                    className="form-control"
-                    placeholder="website"
-                  />
-                </div>
-                <label>
-                  <input
-                    name="name"
-                    type="checkbox"
-                    defaultValue={1}
-                    required="required"
-                  />
-                  <span>
-                    save my name , email and website in this browser for the
-                    next time I comment.
-                  </span>
-                </label>
-              </div>
-              <div className="col-12">
-                <button type="submit" name="submit" className="btn-custom">
-                  Post Comment
-                </button>
-              </div>
+            <ul className="widget-comments">
+              {comments.map((comment) => (
+                <CommentComponent
+                  key={comment.id}
+                  profilePic={comment.data.profilePic}
+                  username={comment.data.username}
+                  timestamp={comment.data.time}
+                  comment={comment.data.comment}
+                />
+              ))}
+            </ul>
+            {/*Leave-comments*/}
+            <div className="title">
+              <h5>Leave a Reply</h5>
             </div>
-          </form>
+            {!user ? <Login /> : <Input uid={uid} />}
+          </div>
         </div>
       </div>
     </>

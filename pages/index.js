@@ -71,9 +71,15 @@ const Home = ({ doc, posts, slides, pages }) => {
                   <div className="row">
                     <div className="col-8 offset-2">
                       <div className="hero-content">
-                        <a href="" className="categorie">
-                          travel
-                        </a>
+                        {slide.data.categories_field.map((categoryName) => (
+                          <a
+                            key={categoryName.category.id}
+                            className="categorie"
+                            style={{ color: "white" }}
+                          >
+                            {categoryName.category.slug}
+                          </a>
+                        ))}
                         <h2>
                           <a href="">{slide.data.title[0].text} </a>
                         </h2>

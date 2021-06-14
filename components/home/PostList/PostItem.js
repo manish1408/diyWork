@@ -42,9 +42,15 @@ const PostItem = ({ post }) => {
           </Link>
         </div>
         <div className="post-card-content">
-          <a href={hrefResolver(post)} className="categorie">
-            Livestyle
-          </a>
+          {post.data.categories_field.map((categoryName) => (
+            <a
+              key={categoryName.category.id}
+              className="categorie"
+              style={{ color: "white" }}
+            >
+              {categoryName.category.slug}
+            </a>
+          ))}
           <h5>
             <Link as={linkResolver(post)} href={hrefResolver(post)}>
               <a>{title}</a>

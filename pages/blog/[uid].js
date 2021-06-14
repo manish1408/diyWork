@@ -17,14 +17,15 @@ import PostDate from "../../components/home/PostList/PostDate";
 import { Header, Footer } from "components/home";
 import Link from "next/link";
 import { hrefResolverCat, linkResolverCat } from "../../prismic-configuration";
-import CommentsComponent from "../../components/CommentsComponent";
+// import CommentsComponent from "../../components/CommentsComponent";
+import Comments from "../../components/Comments";
 // import Category from "../categories";
 
 /**
  * Post page component
  */
 const Post = ({ post, doc, postList, recentPosts, categories }) => {
-  // console.log(categories);
+  // console.log(post);
   if (post && post.data) {
     const hasTitle = RichText.asText(post.data.title).length !== 0;
     const title = hasTitle ? RichText.asText(post.data.title) : "Untitled";
@@ -64,9 +65,15 @@ const Post = ({ post, doc, postList, recentPosts, categories }) => {
                     />
                   </div>
                   <div className="post-single-content">
-                    <a href="blog-grid.html" className="categorie">
-                      travel
-                    </a>
+                    {post.data.categories_field.map((categoryName) => (
+                      <a
+                        key={categoryName.category.id}
+                        className="categorie"
+                        style={{ color: "white" }}
+                      >
+                        {categoryName.category.slug}
+                      </a>
+                    ))}
 
                     <h4>{post.data.title[0].text}</h4>
 
@@ -236,60 +243,11 @@ const Post = ({ post, doc, postList, recentPosts, categories }) => {
                 </div>
                 {/*/*/}
                 {/*widget-comments*/}
-                <div className="widget mb-50">
-                  {/* <CommentsComponent></CommentsComponent> */}
-                </div>
+                {/* <div className="widget mb-50"> */}
+                <Comments uid={post.uid} />
+                {/* </div> */}
               </div>
               <div className="col-lg-4 max-width">
-                {/*                 
-                <div className="widget">
-                  <div className="widget-author">
-                    <a href="author.html" className="image">
-                      <img src="assets/img/author/1.jpg" alt="image" />
-                    </a>
-                    <h6>
-                      <span>Hi, I'm David Smith</span>
-                    </h6>
-                    <p>
-                      I'm David Smith, husband and father , I love
-                      Photography,travel and nature. I'm working as a writer and
-                      blogger with experience of 5 years until now.
-                    </p>
-                    <div className="social-media">
-                      <ul className="list-inline">
-                        <li>
-                          <a href="#" className="color-facebook">
-                            <i className="fab fa-facebook" />
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#" className="color-instagram">
-                            <i className="fab fa-instagram" />
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#" className="color-twitter">
-                            <i className="fab fa-twitter" />
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#" className="color-youtube">
-                            <i className="fab fa-youtube" />
-                          </a>
-                        </li>
-                        <li>
-                          <a href="#" className="color-pinterest">
-                            <i className="fab fa-pinterest" />
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-                
-
-
-                 */}
                 {/*widget-latest-posts*/}
                 <div className="widget ">
                   <div className="section-title">

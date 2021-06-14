@@ -1,6 +1,8 @@
 // import App from 'next/app'
 import { reset, globals } from "styles";
 import Head from "next/head";
+import { StateProvider } from "../utils/StateProvider";
+import reducer, { initialState } from "../utils/reducer";
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -16,7 +18,9 @@ function MyApp({ Component, pageProps }) {
       <style jsx global>
         {globals}
       </style>
-      <Component {...pageProps} />
+      <StateProvider initialState={initialState} reducer={reducer}>
+        <Component {...pageProps} />
+      </StateProvider>
     </>
   );
 }

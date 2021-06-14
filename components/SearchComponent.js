@@ -19,7 +19,7 @@ class SearchComponent extends React.Component {
     };
   }
 
-  componentDidUpdate() { }
+  componentDidUpdate() {}
 
   toggle() {
     this.setState({ addClass: !this.state.addClass });
@@ -77,7 +77,7 @@ class SearchComponent extends React.Component {
       return (
         <div className="search-results ">
           {results.map((result) => {
-            console.log(result);
+            // console.log(result);
             return (
               <div key={result.id}>
                 <Link as={linkResolver(result)} href={hrefResolver(result)}>
