@@ -7,7 +7,7 @@ import { useState } from "react";
 export default function Input({ uid }) {
   const [{ user }, dispatch] = useStateValue();
   const [input, setInput] = useState("");
-
+  console.log(user);
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(input);
@@ -17,6 +17,7 @@ export default function Input({ uid }) {
       time: firebase.firestore.FieldValue.serverTimestamp(),
       profilePic: user.photoURL,
       username: user.displayName,
+      email: user.email,
     });
 
     setInput("");
@@ -36,7 +37,7 @@ export default function Input({ uid }) {
           required="required"
           defaultValue={""}
         />
-
+        <img src={user.photoURL} alt="Avatar" class="avatar_icon"></img>
         <button
           type="submit"
           onClick={handleSubmit}
@@ -44,7 +45,7 @@ export default function Input({ uid }) {
           className="btn-custom"
           style={{ marginTop: "20px" }}
         >
-          Post Comment
+          {"Comment as " + user.displayName}
         </button>
 
         {/* <span>Success</span> */}

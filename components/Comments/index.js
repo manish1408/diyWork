@@ -19,6 +19,7 @@ function comments({ uid }) {
         );
       });
   }, []);
+  // console.log(comments);
   return (
     <>
       <div className="row">
@@ -31,6 +32,9 @@ function comments({ uid }) {
               {comments.map((comment) => (
                 <CommentComponent
                   key={comment.id}
+                  id={comment.id}
+                  uid={uid}
+                  email={comment.data.email}
                   profilePic={comment.data.profilePic}
                   username={comment.data.username}
                   timestamp={comment.data.time}
@@ -40,7 +44,7 @@ function comments({ uid }) {
             </ul>
             {/*Leave-comments*/}
             <div className="title">
-              <h5>Leave a Reply</h5>
+              <h5>Leave a Comment</h5>
             </div>
             {!user ? <Login /> : <Input uid={uid} />}
           </div>
