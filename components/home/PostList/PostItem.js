@@ -76,6 +76,8 @@ const PostItem = ({ post }) => {
               <li>
                 <PostDate date={post.data.date} />
               </li>
+              <div className="heart post_list_heart"></div>
+              <span className="post_list_heart">4</span>
             </ul>
           </div>
         </div>

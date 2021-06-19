@@ -2,26 +2,39 @@ import React from "react";
 import { useStateValue } from "../../utils/StateProvider";
 import firebase from "firebase";
 import db from "../../utils/firebase";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Input({ uid }) {
   const [{ user }, dispatch] = useStateValue();
   const [input, setInput] = useState("");
-  console.log(user);
+  const [commentBtn, setCommentBtn] = useState(
+    "Comment As " + user.displayName
+  );
+  const [btnDisable, setBtnDisable] = useState(false);
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(input);
-
-    db.collection(uid).add({
-      comment: input,
-      time: firebase.firestore.FieldValue.serverTimestamp(),
-      profilePic: user.photoURL,
-      username: user.displayName,
-      email: user.email,
-    });
-
-    setInput("");
+    if (input) {
+      db.collection(uid).add({
+        comment: input,
+        time: firebase.firestore.FieldValue.serverTimestamp(),
+        profilePic: user.photoURL,
+        username: user.displayName,
+        email: user.email,
+      });
+      setCommentBtn("Comment Posted");
+      setBtnDisable(true);
+      setInput("");
+    }
   };
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setCommentBtn("Comment As " + user.displayName);
+      setBtnDisable(false);
+    }, 3000);
+
+    return () => clearTimeout(timeout);
+  }, [btnDisable]);
   return (
     <>
       <form className="widget-form">
@@ -42,10 +55,13 @@ export default function Input({ uid }) {
           type="submit"
           onClick={handleSubmit}
           name="submit"
-          className="btn-custom"
+          className={
+            btnDisable ? "btn-custom btn-custom_clicked " : "btn-custom"
+          }
           style={{ marginTop: "20px" }}
+          disabled={btnDisable}
         >
-          {"Comment as " + user.displayName}
+          {commentBtn}
         </button>
 
         {/* <span>Success</span> */}

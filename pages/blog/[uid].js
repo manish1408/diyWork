@@ -19,12 +19,15 @@ import Link from "next/link";
 import { hrefResolverCat, linkResolverCat } from "../../prismic-configuration";
 // import CommentsComponent from "../../components/CommentsComponent";
 import Comments from "../../components/Comments";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 // import Category from "../categories";
 
 /**
  * Post page component
  */
-const Post = ({ post, doc, postList, recentPosts, categories }) => {
+
+const Post = ({ post, doc, postList, recentPosts, categories, uid }) => {
   // console.log(post);
   if (post && post.data) {
     const hasTitle = RichText.asText(post.data.title).length !== 0;
@@ -39,6 +42,13 @@ const Post = ({ post, doc, postList, recentPosts, categories }) => {
     }
 
     const videoId = getId(post.data.video_url.embed_url);
+
+    const router = useRouter();
+
+    const [updateduid, setUpdateduid] = useState(uid);
+    useEffect(() => {
+      setUpdateduid(router.asPath.split("/").pop());
+    }, [router.asPath]);
 
     return (
       <DefaultLayout>
@@ -92,6 +102,12 @@ const Post = ({ post, doc, postList, recentPosts, categories }) => {
                         <li className="dot" />
                         <li>
                           <PostDate date={post.data.date} />
+                        </li>
+                        <li className="blog_heart_counter">
+                          <span>4</span>
+                        </li>
+                        <li className="blog_heart">
+                          <div className="heart"></div>
                         </li>
                       </ul>
                     </div>
@@ -244,7 +260,11 @@ const Post = ({ post, doc, postList, recentPosts, categories }) => {
                 {/*/*/}
                 {/*widget-comments*/}
                 {/* <div className="widget mb-50"> */}
-                <Comments uid={post.uid} />
+                {uid != updateduid ? (
+                  <Comments uid={updateduid} />
+                ) : (
+                  <Comments uid={uid} />
+                )}
                 {/* </div> */}
               </div>
               <div className="col-lg-4 max-width">
@@ -412,6 +432,7 @@ export async function getStaticProps({
   previewData = {},
 }) {
   const { ref } = previewData;
+  const uid = params.uid;
   const doc =
     (await Client().getSingle("blog_home", ref ? { ref } : null)) || {};
   const post =
@@ -438,6 +459,7 @@ export async function getStaticProps({
 
   return {
     props: {
+      uid,
       preview,
       post,
       postList,

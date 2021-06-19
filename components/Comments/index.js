@@ -18,7 +18,7 @@ function comments({ uid }) {
           snapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() }))
         );
       });
-  }, []);
+  }, [uid]);
   // console.log(comments);
   return (
     <>

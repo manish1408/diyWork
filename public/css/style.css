@@ -604,8 +604,13 @@ ul {
   transition: all 0.5s ease-in-out;
 }
 
-.btn-custom:hover,
-.btn-custom:focus {
+.btn-custom:hover {
+  color: #ffffff;
+  background-color: #ff0835;
+  outline: none;
+  opacity: 0.8;
+}
+.btn-custom_clicked {
   color: #ffffff;
   background-color: #ff0835;
   outline: none;
@@ -2909,4 +2914,52 @@ img.avatar {
   width: 50px;
   height: 50px;
   border-radius: 50%;
+}
+
+/*Like Button*/
+
+.post_list_heart {
+  position: absolute;
+  right: 30px;
+}
+
+.blog_heart {
+  float: right;
+  margin-top: -15px;
+}
+
+.blog_heart_counter {
+  float: right;
+  padding-top: 10px;
+}
+
+.heart {
+  cursor: pointer;
+  height: 70px;
+  width: 70px;
+  background-image: url("https://abs.twimg.com/a/1446542199/img/t1/web_heart_animation.png");
+  background-position: left;
+  background-repeat: no-repeat;
+  background-size: 2900%;
+}
+
+.heart_active {
+  background-position: right !important;
+}
+
+.heart:hover {
+  background-position: right;
+}
+
+.is_animating {
+  animation: heart-burst 0.8s steps(28) 1;
+}
+
+@keyframes heart-burst {
+  from {
+    background-position: left;
+  }
+  to {
+    background-position: right;
+  }
 }
