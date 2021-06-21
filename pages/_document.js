@@ -1,6 +1,7 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
 import PrismicScript from "../components/PrismicScript";
 import { reset, globals } from "styles";
+import Gtm from 'next-gtm'
 
 class MyDocument extends Document {
   static async getInitialProps(ctx) {
@@ -26,6 +27,7 @@ class MyDocument extends Document {
           <link rel="stylesheet" href="/css/style.css" />
           <link rel="stylesheet" href="/css/custom.css" />
           <link rel="icon" href="/favicon.png" type="image/png" />
+          <Gtm id='GTM-K6D5VBD'/>
         </Head>
         <body>
           <Main />
@@ -41,7 +43,6 @@ class MyDocument extends Document {
           <script src="/js/main.js"></script>
           {/* <script src="https://diy-work.disqus.com/embed.js" async ></script>
           <script id="dsq-count-scr" src="//diy-work.disqus.com/count.js" async></script> */}
-
         </body>
       </Html>
     );

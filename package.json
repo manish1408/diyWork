@@ -10,6 +10,7 @@
     "bootstrap": "^5.0.1",
     "firebase": "^8.6.7",
     "next": "^9.1.4",
+    "next-gtm": "^1.0.0",
     "prismic-reactjs": "^1.1.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
@@ -25,6 +26,6 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/manish1408/diyWork",
-    "version" : "1.0.1"
+    "version": "1.0.1"
   }
 }
