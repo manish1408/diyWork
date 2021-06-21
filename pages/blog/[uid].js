@@ -21,6 +21,9 @@ import { hrefResolverCat, linkResolverCat } from "../../prismic-configuration";
 import Comments from "../../components/Comments";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { useStateValue } from "../../utils/StateProvider";
+import db from "../../utils/firebase";
+import firebase from "firebase";
 // import Category from "../categories";
 
 /**
@@ -49,6 +52,65 @@ const Post = ({ post, doc, postList, recentPosts, categories, uid }) => {
     useEffect(() => {
       setUpdateduid(router.asPath.split("/").pop());
     }, [router.asPath]);
+
+    const [{ user }, dispatch] = useStateValue();
+    const [count, setCount] = useState({});
+    const [like, setlike] = useState(true);
+    const [likeclass, setLikeclass] = useState("heart");
+
+    useEffect(() => {
+      db.collection(updateduid)
+        .doc("Likes")
+        .onSnapshot((doc) => {
+          setCount(doc.data());
+        });
+      // const likecount = db.collection(uid).doc("Likes").length();
+      // console.log(likecount);
+    }, []);
+
+    // if (user) {
+    //   db.collection(updateduid)
+    //     .where("Likes", "array-contains", user.uid)
+    //     .get()
+    //     .then((querySnapshot) => {
+    //       querySnapshot.forEach((doc) => {
+    //         // doc.data() is never undefined for query doc snapshots
+    //         console.log(doc.id, " => ", doc.data());
+    //       });
+    //     })
+    //     .catch((error) => {
+    //       console.log("Error getting documents: ", error);
+    //     });
+    // }
+
+    const handleSubmit = (e) => {
+      e.preventDefault();
+
+      if (user) {
+        setlike(!like);
+        if (like) {
+          db.collection(updateduid)
+            .doc("Likes")
+            .set(
+              {
+                [user.uid]: user.displayName,
+              },
+              { merge: true }
+            );
+        } else {
+          db.collection(updateduid)
+            .doc("Likes")
+            .update(
+              {
+                [user.uid]: firebase.firestore.FieldValue.delete(),
+              },
+              { merge: true }
+            );
+        }
+      } else {
+        alert("You must sign in");
+      }
+    };
 
     return (
       <DefaultLayout>
@@ -104,10 +166,13 @@ const Post = ({ post, doc, postList, recentPosts, categories, uid }) => {
                           <PostDate date={post.data.date} />
                         </li>
                         <li className="blog_heart_counter">
-                          <span>4</span>
+                          <span>{count ? Object.keys(count).length : "0"}</span>
                         </li>
                         <li className="blog_heart">
-                          <div className="heart"></div>
+                          <div
+                            onClick={handleSubmit}
+                            className={like ? "heart" : "heart heart_active"}
+                          ></div>
                         </li>
                       </ul>
                     </div>
@@ -125,7 +190,7 @@ const Post = ({ post, doc, postList, recentPosts, categories, uid }) => {
                         )}
                       </ul>
                     </div> */}
-                    <div className="social-media">
+                    {/* <div className="social-media">
                       <ul className="list-inline">
                         <li>
                           <a href="#" className="color-facebook">
@@ -153,7 +218,7 @@ const Post = ({ post, doc, postList, recentPosts, categories, uid }) => {
                           </a>
                         </li>
                       </ul>
-                    </div>
+                    </div> */}
                   </div>
                 </div>{" "}
                 {/*/*/}

@@ -1077,6 +1077,7 @@ input:checked + .slider:before {
 }
 
 .navbar-right .search-icon {
+  margin-left: 20px;
   width: 35px;
   height: 35px;
   border-radius: 50%;
@@ -2916,6 +2917,14 @@ img.avatar {
   border-radius: 50%;
 }
 
+.avatar_icon_header {
+  margin-right: 10px;
+  vertical-align: middle;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+}
+
 /*Like Button*/
 
 .post_list_heart {
@@ -2943,16 +2952,17 @@ img.avatar {
   background-size: 2900%;
 }
 
-.heart_active {
+/* .heart_active {
   background-position: right !important;
-}
+} */
 
-.heart:hover {
+/* .heart:hover {
   background-position: right;
-}
+} */
 
-.is_animating {
+.heart_active {
   animation: heart-burst 0.8s steps(28) 1;
+  background-position: right;
 }
 
 @keyframes heart-burst {

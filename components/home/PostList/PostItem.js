@@ -5,6 +5,10 @@ import { RichText } from "prismic-reactjs";
 import PostDate from "./PostDate";
 import FirstParagraph from "./FirstParagraph";
 import { hrefResolver, linkResolver } from "prismic-configuration";
+import { useState, useEffect } from "react";
+import db from "../../../utils/firebase";
+import firebase from "firebase";
+import { useStateValue } from "../../../utils/StateProvider";
 
 /**
  * Post list item component
@@ -13,6 +17,47 @@ const PostItem = ({ post }) => {
   const title = RichText.asText(post.data.title)
     ? RichText.asText(post.data.title)
     : "Untitled";
+
+  const [{ user }, dispatch] = useStateValue();
+  const [count, setCount] = useState({});
+  const [like, setlike] = useState(true);
+
+  useEffect(() => {
+    db.collection(post.uid)
+      .doc("Likes")
+      .onSnapshot((doc) => {
+        setCount(doc.data());
+      });
+  }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (user) {
+      setlike(!like);
+      if (like) {
+        db.collection(post.uid)
+          .doc("Likes")
+          .set(
+            {
+              [user.uid]: user.displayName,
+            },
+            { merge: true }
+          );
+      } else {
+        db.collection(post.uid)
+          .doc("Likes")
+          .update(
+            {
+              [user.uid]: firebase.firestore.FieldValue.delete(),
+            },
+            { merge: true }
+          );
+      }
+    } else {
+      alert("You must sign in");
+    }
+  };
 
   return (
     // <div className="blog-post">
@@ -76,8 +121,17 @@ const PostItem = ({ post }) => {
               <li>
                 <PostDate date={post.data.date} />
               </li>
-              <div className="heart post_list_heart"></div>
-              <span className="post_list_heart">4</span>
+              <div
+                onClick={handleSubmit}
+                className={
+                  like
+                    ? "heart post_list_heart"
+                    : "heart post_list_heart heart_active"
+                }
+              ></div>
+              <span className="post_list_heart">
+                {count ? Object.keys(count).length : "0"}
+              </span>
             </ul>
           </div>
         </div>

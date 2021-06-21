@@ -3,6 +3,8 @@ import { RichText } from "prismic-reactjs";
 // import { headerStyles } from "styles";
 import Link from "next/link";
 import SearchComponent from "../SearchComponent";
+import Login from "../Comments/Login";
+import { useStateValue } from "../../utils/StateProvider";
 // import OwlCarousel from "react-owl-carousel2";
 /**
  * Homepage header component
@@ -18,6 +20,7 @@ const Header = ({ logoLight, logoDark, headline, description }) => {
   //   autoplay: false,
   //   navText: ["", ""],
   // };
+  const [{ user }, dispatch] = useStateValue();
 
   return (
     // <div className="home">
@@ -232,7 +235,19 @@ const Header = ({ logoLight, logoDark, headline, description }) => {
                 <div className="slider round" />
               </label>
             </div> */}
-            <div className="social-icones">
+            {!user ? (
+              <Login />
+            ) : (
+              <>
+                <img
+                  src={user.photoURL}
+                  alt="Avatar"
+                  class="avatar_icon_header"
+                ></img>
+                <span>{user.displayName}</span>
+              </>
+            )}
+            {/* <div className="social-icones">
               <ul className="list-inline">
                 <li>
                   <a href="#">
@@ -250,7 +265,7 @@ const Header = ({ logoLight, logoDark, headline, description }) => {
                   </a>
                 </li>
               </ul>
-            </div>
+            </div> */}
             <div className="search-icon">
               <i className="icon_search" />
             </div>
