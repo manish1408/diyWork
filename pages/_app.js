@@ -3,14 +3,6 @@ import { reset, globals } from "styles";
 import Head from "next/head";
 import { StateProvider } from "../utils/StateProvider";
 import reducer, { initialState } from "../utils/reducer";
-import TagManager from 'react-gtm-module'
-
-const tagManagerArgs = {
-  gtmId: 'GTM-K6D5VBD'
-}
-
-TagManager.initialize(tagManagerArgs)
-
 function MyApp({ Component, pageProps }) {
   return (
     <>
