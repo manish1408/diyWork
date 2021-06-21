@@ -3,7 +3,6 @@ import { reset, globals } from "styles";
 import Head from "next/head";
 import { StateProvider } from "../utils/StateProvider";
 import reducer, { initialState } from "../utils/reducer";
-
 function MyApp({ Component, pageProps }) {
   return (
     <>
