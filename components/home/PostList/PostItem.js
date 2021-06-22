@@ -19,16 +19,42 @@ const PostItem = ({ post }) => {
     : "Untitled";
 
   const [{ user }, dispatch] = useStateValue();
-  const [count, setCount] = useState({});
+  const [likeData, setLikeData] = useState({});
   const [like, setlike] = useState(true);
+  const [likeclass, setLikeclass] = useState("heart post_list_heart");
 
   useEffect(() => {
     db.collection(post.uid)
-      .doc("Likes")
+      .doc("likes")
       .onSnapshot((doc) => {
-        setCount(doc.data());
+        if (doc.data()) {
+          setLikeData(doc.data());
+        } else {
+          setLikeData({});
+        }
       });
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      db.collection("likes")
+        .doc(user.email)
+        .onSnapshot((doc) => {
+          if (doc.data()) {
+            const likedPost = doc.data();
+            if (likedPost.hasOwnProperty(post.uid)) {
+              setLikeclass("heart post_list_heart heart_active");
+              setlike(!like);
+            } else {
+              setLikeclass("heart post_list_heart");
+            }
+          }
+        });
+    }
+  }, [user]);
+
+  const increment = firebase.firestore.FieldValue.increment(1);
+  const decrement = firebase.firestore.FieldValue.increment(-1);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -36,29 +62,39 @@ const PostItem = ({ post }) => {
     if (user) {
       setlike(!like);
       if (like) {
-        db.collection(post.uid)
-          .doc("Likes")
+        db.collection("likes")
+          .doc(user.email)
           .set(
             {
-              [user.uid]: user.displayName,
+              [post.uid]: true,
             },
             { merge: true }
           );
+
+        db.collection(post.uid).doc("likes").set(
+          {
+            likes: increment,
+          },
+          { merge: true }
+        );
       } else {
-        db.collection(post.uid)
-          .doc("Likes")
-          .update(
-            {
-              [user.uid]: firebase.firestore.FieldValue.delete(),
-            },
-            { merge: true }
-          );
+        db.collection("likes")
+          .doc(user.email)
+          .update({
+            [post.uid]: firebase.firestore.FieldValue.delete(),
+          });
+
+        db.collection(post.uid).doc("likes").set(
+          {
+            likes: decrement,
+          },
+          { merge: true }
+        );
       }
     } else {
       alert("You must sign in");
     }
   };
-
   return (
     // <div className="blog-post">
     //   <NextLink
@@ -72,8 +108,8 @@ const PostItem = ({ post }) => {
 
     //
 
-    // </div>
-    <div className="col-lg-4 col-md-6">
+    // </div> col-lg-4 col-md-6
+    <div className="card">
       {/*Post-1*/}
       <div className="post-card">
         <div className="post-card-image">
@@ -121,16 +157,9 @@ const PostItem = ({ post }) => {
               <li>
                 <PostDate date={post.data.date} />
               </li>
-              <div
-                onClick={handleSubmit}
-                className={
-                  like
-                    ? "heart post_list_heart"
-                    : "heart post_list_heart heart_active"
-                }
-              ></div>
+              <div onClick={handleSubmit} className={likeclass}></div>
               <span className="post_list_heart">
-                {count ? Object.keys(count).length : "0"}
+                {likeData === null ? "0" : likeData.likes}
               </span>
             </ul>
           </div>

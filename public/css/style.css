@@ -1153,8 +1153,8 @@ input:checked + .slider:before {
 }
 
 .col2-layout .card-columns {
-  -webkit-column-count: 2;
-  column-count: 2;
+  -webkit-column-count: 3;
+  column-count: 3;
 }
 
 .col2-layout .post-card {

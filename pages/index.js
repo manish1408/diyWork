@@ -92,7 +92,7 @@ const Home = ({ doc, posts, slides, pages }) => {
           </section>
         </div>
 
-        <section className="mt-80">
+        <section className="masonry-layout col2-layout mt-30">
           <div className="container-fluid">
             <div className="row">
               <PostList posts={otherPage} />

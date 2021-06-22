@@ -24,6 +24,7 @@ import { useRouter } from "next/router";
 import { useStateValue } from "../../utils/StateProvider";
 import db from "../../utils/firebase";
 import firebase from "firebase";
+
 // import Category from "../categories";
 
 /**
@@ -47,6 +48,12 @@ const Post = ({ post, doc, postList, recentPosts, categories, uid }) => {
     const videoId = getId(post.data.video_url.embed_url);
 
     const router = useRouter();
+    // const [pageUrl, setPageUrl] = useState("");
+
+    // if (typeof window !== "undefined") {
+    //   setPageUrl(window.location.href);
+    //   console.log(pageUrl);
+    // }
 
     const [updateduid, setUpdateduid] = useState(uid);
     useEffect(() => {
@@ -54,34 +61,42 @@ const Post = ({ post, doc, postList, recentPosts, categories, uid }) => {
     }, [router.asPath]);
 
     const [{ user }, dispatch] = useStateValue();
-    const [count, setCount] = useState({});
+    const [likeData, setLikeData] = useState({});
     const [like, setlike] = useState(true);
     const [likeclass, setLikeclass] = useState("heart");
 
     useEffect(() => {
       db.collection(updateduid)
-        .doc("Likes")
+        .doc("likes")
         .onSnapshot((doc) => {
-          setCount(doc.data());
+          if (doc.data()) {
+            setLikeData(doc.data());
+          } else {
+            setLikeData({});
+          }
         });
-      // const likecount = db.collection(uid).doc("Likes").length();
-      // console.log(likecount);
     }, []);
 
-    // if (user) {
-    //   db.collection(updateduid)
-    //     .where("Likes", "array-contains", user.uid)
-    //     .get()
-    //     .then((querySnapshot) => {
-    //       querySnapshot.forEach((doc) => {
-    //         // doc.data() is never undefined for query doc snapshots
-    //         console.log(doc.id, " => ", doc.data());
-    //       });
-    //     })
-    //     .catch((error) => {
-    //       console.log("Error getting documents: ", error);
-    //     });
-    // }
+    useEffect(() => {
+      if (user) {
+        db.collection("likes")
+          .doc(user.email)
+          .onSnapshot((doc) => {
+            if (doc.data()) {
+              const likedPost = doc.data();
+              if (likedPost.hasOwnProperty(updateduid)) {
+                setLikeclass("heart heart_active");
+                setlike(!like);
+              } else {
+                setLikeclass("heart");
+              }
+            }
+          });
+      }
+    }, [user]);
+
+    const increment = firebase.firestore.FieldValue.increment(1);
+    const decrement = firebase.firestore.FieldValue.increment(-1);
 
     const handleSubmit = (e) => {
       e.preventDefault();
@@ -89,23 +104,34 @@ const Post = ({ post, doc, postList, recentPosts, categories, uid }) => {
       if (user) {
         setlike(!like);
         if (like) {
-          db.collection(updateduid)
-            .doc("Likes")
+          db.collection("likes")
+            .doc(user.email)
             .set(
               {
-                [user.uid]: user.displayName,
+                [updateduid]: user.displayName,
               },
               { merge: true }
             );
+
+          db.collection(updateduid).doc("likes").set(
+            {
+              likes: increment,
+            },
+            { merge: true }
+          );
         } else {
-          db.collection(updateduid)
-            .doc("Likes")
-            .update(
-              {
-                [user.uid]: firebase.firestore.FieldValue.delete(),
-              },
-              { merge: true }
-            );
+          db.collection("likes")
+            .doc(user.email)
+            .update({
+              [updateduid]: firebase.firestore.FieldValue.delete(),
+            });
+
+          db.collection(updateduid).doc("likes").set(
+            {
+              likes: decrement,
+            },
+            { merge: true }
+          );
         }
       } else {
         alert("You must sign in");
@@ -166,12 +192,14 @@ const Post = ({ post, doc, postList, recentPosts, categories, uid }) => {
                           <PostDate date={post.data.date} />
                         </li>
                         <li className="blog_heart_counter">
-                          <span>{count ? Object.keys(count).length : "0"}</span>
+                          <span>
+                            {likeData === null ? "0" : likeData.likes}
+                          </span>
                         </li>
                         <li className="blog_heart">
                           <div
                             onClick={handleSubmit}
-                            className={like ? "heart" : "heart heart_active"}
+                            className={likeclass}
                           ></div>
                         </li>
                       </ul>
@@ -181,20 +209,20 @@ const Post = ({ post, doc, postList, recentPosts, categories, uid }) => {
                     <SliceZone sliceZone={post.data.body} />
                   </div>
                   <div className="post-single-footer">
-                    {/* <div className="tags">
-                      <ul className="list-inline">
-                        {post.tags.length !== 0 ? (
-                          post.tags.map((tag, key) => <li key={key}>{tag}</li>)
-                        ) : (
-                          <></>
-                        )}
-                      </ul>
-                    </div> */}
+                    {/* <ul className="list-inline">
+                      <li className="blog_heart_counter">
+                        <span>{likeData === null ? "0" : likeData.likes}</span>
+                      </li>
+                      <li className="blog_heart">
+                        <div onClick={handleSubmit} className={likeclass}></div>
+                      </li>
+                    </ul> */}
+
                     {/* <div className="social-media">
                       <ul className="list-inline">
                         <li>
                           <a href="#" className="color-facebook">
-                            <i className="fab fa-facebook" />
+                            <Facebook url={pageUrl} />
                           </a>
                         </li>
                         <li>
@@ -204,7 +232,7 @@ const Post = ({ post, doc, postList, recentPosts, categories, uid }) => {
                         </li>
                         <li>
                           <a href="#" className="color-twitter">
-                            <i className="fab fa-twitter" />
+                            <Twitter url={pageUrl} />
                           </a>
                         </li>
                         <li>

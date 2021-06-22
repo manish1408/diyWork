@@ -15,9 +15,13 @@ const PostList = ({ posts, pages }) => {
   // }
   return (
     <>
-      {posts.map((post) => (
-        <PostItem post={post} key={post.id} />
-      ))}
+      <div className="col-lg-12">
+        <div className="card-columns">
+          {posts.map((post) => (
+            <PostItem post={post} key={post.id} />
+          ))}
+        </div>
+      </div>
     </>
   );
 };
