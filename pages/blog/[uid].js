@@ -48,12 +48,6 @@ const Post = ({ post, doc, postList, recentPosts, categories, uid }) => {
     const videoId = getId(post.data.video_url.embed_url);
 
     const router = useRouter();
-    // const [pageUrl, setPageUrl] = useState("");
-
-    // if (typeof window !== "undefined") {
-    //   setPageUrl(window.location.href);
-    //   console.log(pageUrl);
-    // }
 
     const [updateduid, setUpdateduid] = useState(uid);
     useEffect(() => {
