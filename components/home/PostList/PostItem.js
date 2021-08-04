@@ -97,6 +97,10 @@ const PostItem = ({ post }) => {
     }
   };
 
+  const alertMessage = () => {
+    alert("Please sign in first");
+  };
+
   //console.log(authors);
 
   // const author = authors.filter(function (itm) {
@@ -193,7 +197,10 @@ const PostItem = ({ post }) => {
                 <li>
                   <PostDate date={post.data.date} />
                 </li>
-                <div onClick={handleSubmit} className={likeclass}></div>
+                <div
+                  onClick={user ? handleSubmit : alertMessage}
+                  className={likeclass}
+                ></div>
                 <span className="post_list_heart">
                   {likeData === null ? "0" : likeData.likes}
                 </span>

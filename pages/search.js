@@ -27,7 +27,7 @@ const Search = () => {
           }
         });
       setInput("");
-      console.log(response);
+      //console.log(response);
     }
   };
 

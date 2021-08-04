@@ -45,7 +45,7 @@ const Post = ({
   uid,
   authors,
 }) => {
-  console.log(post);
+  //console.log(post);
   if (post && post.data) {
     const hasTitle = RichText.asText(post.data.title).length !== 0;
     const title = hasTitle ? RichText.asText(post.data.title) : "Untitled";
@@ -100,7 +100,7 @@ const Post = ({
             }
           });
       }
-    }, [user]);
+    }, [updateduid]);
 
     const increment = firebase.firestore.FieldValue.increment(1);
     const decrement = firebase.firestore.FieldValue.increment(-1);
@@ -145,14 +145,27 @@ const Post = ({
       }
     };
 
-    console.log(post);
+    const alertMessage = () => {
+      alert("Please sign in first");
+    };
+
+    //console.log(post);
     return (
       <DefaultLayout>
         <Head>
           <title>{title}</title>
-          <meta name="title" content="DIY Projects, Science experiments, and Ideas for makers" />
-          <meta name="description" content="Thousands of free DIY projects, science experiments, and Ideas for Makers on DIY diywork.net" />
-          <meta name="keywords" content="free science projects,  DIY projects, DIY Ideas, science experiments" />
+          <meta
+            name="title"
+            content="DIY Projects, Science experiments, and Ideas for makers"
+          />
+          <meta
+            name="description"
+            content="Thousands of free DIY projects, science experiments, and Ideas for Makers on DIY diywork.net"
+          />
+          <meta
+            name="keywords"
+            content="free science projects,  DIY projects, DIY Ideas, science experiments"
+          />
           <meta name="robots" content="index, follow" />
           <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
           <meta name="language" content="English"></meta>
@@ -216,17 +229,19 @@ const Post = ({
                         <li>
                           <PostDate date={post.data.date} />
                         </li>
-                        <li className="blog_heart_counter">
-                          <span>
-                            {likeData === null ? "0" : likeData.likes}
-                          </span>
-                        </li>
-                        <li className="blog_heart">
-                          <div
-                            onClick={handleSubmit}
-                            className={likeclass}
-                          ></div>
-                        </li>
+                        <>
+                          <li className="blog_heart_counter">
+                            <span>
+                              {likeData === null ? "0" : likeData.likes}
+                            </span>
+                          </li>
+                          <li className="blog_heart">
+                            <div
+                              onClick={user ? handleSubmit : alertMessage}
+                              className={likeclass}
+                            ></div>
+                          </li>
+                        </>
                       </ul>
                     </div>
                   </div>
@@ -577,7 +592,7 @@ export async function getStaticProps({
     (await Client().query(Prismic.Predicates.at("document.type", "post"), {
       pageSize: 2,
       after: `${post.id}`,
-      orderings: "[my.post.date]",
+      orderings: "[my.post.date desc]",
       ...(ref ? { ref } : null),
     })) || {};
 
