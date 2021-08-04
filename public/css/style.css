@@ -1347,6 +1347,16 @@ input:checked + .slider:before {
   margin-bottom: 0px;
 }
 
+.post-card-content .categorie {
+  margin-right: 10px !important;
+  margin-bottom: 20px;
+}
+
+.post-single-content .categorie {
+  margin-bottom: 20px;
+  margin-right: 10px !important;
+}
+
 .widget-instagram {
   display: -ms-grid;
   display: grid;
@@ -2893,6 +2903,12 @@ img.avatar {
 .back_button {
   float: left;
   padding-bottom: 0px !important;
+}
+
+.author_page_btn {
+  position: absolute;
+  bottom: 0;
+  left: 40px;
 }
 
 .back_button a {

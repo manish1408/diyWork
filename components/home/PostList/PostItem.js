@@ -1,7 +1,8 @@
 import React from "react";
 import Link from "next/link";
 import { RichText } from "prismic-reactjs";
-
+import Prismic from "@prismicio/client";
+import { Client } from "utils/prismicHelpers";
 import PostDate from "./PostDate";
 import FirstParagraph from "./FirstParagraph";
 import { hrefResolver, linkResolver } from "prismic-configuration";
@@ -95,6 +96,31 @@ const PostItem = ({ post }) => {
       alert("You must sign in");
     }
   };
+
+  //console.log(authors);
+
+  // const author = authors.filter(function (itm) {
+  //   return post.data.author.slug.indexOf(itm.data.slug[0]) > -1;
+  // });
+
+  // const author = Object.values(authors).filter((i) =>
+  //   post.data.author.slug.includes(i.data.slug[0])
+  // );
+
+  // console.log(author);
+
+  //console.log(authors);
+
+  const [author, setAuthor] = useState();
+
+  Client()
+    .query(Prismic.Predicates.at("document.id", post.data.author.id))
+    .then((response) => {
+      setAuthor(response.results);
+    });
+
+  //console.log(post.data.author.id);
+
   return (
     // <div className="blog-post">
     //   <NextLink
@@ -109,64 +135,75 @@ const PostItem = ({ post }) => {
     //
 
     // </div> col-lg-4 col-md-6
-    <div className="card">
-      {/*Post-1*/}
-      <div className="post-card">
-        <div className="post-card-image">
-          <Link as={linkResolver(post)} href={hrefResolver(post)}>
-            <a>
-              <img
-                src={post.data.imagepreview.url}
-                alt={post.data.imagepreview.alt}
-              />
-            </a>
-          </Link>
-        </div>
-        <div className="post-card-content">
-          {post.data.categories_field.map((categoryName) => (
-            <a
-              key={categoryName.category.id}
-              className="categorie"
-              style={{ color: "white" }}
-            >
-              {categoryName.category.slug}
-            </a>
-          ))}
-          <h5>
+    <>
+      <div className="card">
+        {/*Post-1*/}
+        <div className="post-card post-full">
+          <div className="post-card-image">
             <Link as={linkResolver(post)} href={hrefResolver(post)}>
-              <a>{title}</a>
+              <a>
+                <img
+                  src={post.data.imagepreview.url}
+                  alt={post.data.imagepreview.alt}
+                />
+              </a>
             </Link>
-          </h5>
-          <p>
-            <FirstParagraph sliceZone={post.data.body} textLimit={300} />
-          </p>
-          <div className="post-card-info">
-            <ul className="list-inline">
-              <li>
-                <a href="author.html">
-                  <img
-                    src={post.data.authorimage.url}
-                    alt={post.data.authorimage.url.alt}
-                  />
-                </a>
-              </li>
-              <li>
-                <a href="author.html">{post.data.authorname[0].text}</a>
-              </li>
-              <li className="dot" />
-              <li>
-                <PostDate date={post.data.date} />
-              </li>
-              <div onClick={handleSubmit} className={likeclass}></div>
-              <span className="post_list_heart">
-                {likeData === null ? "0" : likeData.likes}
-              </span>
-            </ul>
+          </div>
+          <div className="post-card-content">
+            {post.data.categories_field.map((categoryName) => (
+              <a
+                key={categoryName.category.id}
+                className="categorie"
+                style={{ color: "white" }}
+              >
+                {categoryName.category.slug !== "-"
+                  ? categoryName.category.slug
+                  : "Uncategorized"}
+              </a>
+            ))}
+            <h5>
+              <Link as={linkResolver(post)} href={hrefResolver(post)}>
+                <a>{title}</a>
+              </Link>
+            </h5>
+            <p>
+              <FirstParagraph sliceZone={post.data.body} textLimit={300} />
+            </p>
+            <div className="post-card-info">
+              <ul className="list-inline">
+                {author ? (
+                  <>
+                    <li>
+                      <a>
+                        <img
+                          src={author[0].data.author_image.url}
+                          alt={author[0].data.author_name[0].text}
+                        />
+                      </a>
+                    </li>
+                    <li>
+                      <a>{author[0].data.author_name[0].text}</a>
+                    </li>
+                  </>
+                ) : (
+                  ""
+                )}
+
+                <li className="dot" />
+                <li>
+                  <PostDate date={post.data.date} />
+                </li>
+                <div onClick={handleSubmit} className={likeclass}></div>
+                <span className="post_list_heart">
+                  {likeData === null ? "0" : likeData.likes}
+                </span>
+              </ul>
+            </div>
           </div>
         </div>
+        {/*/*/}
       </div>
-      {/*/*/}
-    </div>
+    </>
   );
 };
 

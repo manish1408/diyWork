@@ -16,7 +16,12 @@ import { postStyles } from "styles";
 import PostDate from "../../components/home/PostList/PostDate";
 import { Header, Footer } from "components/home";
 import Link from "next/link";
-import { hrefResolverCat, linkResolverCat } from "../../prismic-configuration";
+import {
+  hrefResolverAuthor,
+  hrefResolverCat,
+  linkResolverAuthor,
+  linkResolverCat,
+} from "../../prismic-configuration";
 // import CommentsComponent from "../../components/CommentsComponent";
 import Comments from "../../components/Comments";
 import { useState, useEffect } from "react";
@@ -31,8 +36,16 @@ import firebase from "firebase";
  * Post page component
  */
 
-const Post = ({ post, doc, postList, recentPosts, categories, uid }) => {
-  // console.log(post);
+const Post = ({
+  post,
+  doc,
+  postList,
+  recentPosts,
+  categories,
+  uid,
+  authors,
+}) => {
+  console.log(post);
   if (post && post.data) {
     const hasTitle = RichText.asText(post.data.title).length !== 0;
     const title = hasTitle ? RichText.asText(post.data.title) : "Untitled";
@@ -132,6 +145,7 @@ const Post = ({ post, doc, postList, recentPosts, categories, uid }) => {
       }
     };
 
+    console.log(post);
     return (
       <DefaultLayout>
         <Head>
@@ -172,14 +186,25 @@ const Post = ({ post, doc, postList, recentPosts, categories, uid }) => {
                     <div className="post-single-info">
                       <ul className="list-inline">
                         <li>
-                          <a href="author.html">
-                            <img src={post.data.authorimage.url} alt="Image" />
-                          </a>
+                          <Link
+                            as={linkResolverAuthor(post.data.author)}
+                            href={hrefResolverAuthor(post.data.author)}
+                          >
+                            <a>
+                              <img
+                                src={post.data.author.data.author_image.url}
+                                alt="Image"
+                              />
+                            </a>
+                          </Link>
                         </li>
                         <li>
-                          <a href="author.html">
-                            {post.data.authorname[0].text}
-                          </a>{" "}
+                          <Link
+                            as={linkResolverAuthor(post.data.author)}
+                            href={hrefResolverAuthor(post.data.author)}
+                          >
+                            <a>{post.data.author.data.author_name[0].text}</a>
+                          </Link>
                         </li>
                         <li className="dot" />
                         <li>
@@ -523,7 +548,13 @@ export async function getStaticProps({
   const doc =
     (await Client().getSingle("blog_home", ref ? { ref } : null)) || {};
   const post =
-    (await Client().getByUID("post", params.uid, ref ? { ref } : null)) || {};
+    (await Client().getByUID("post", params.uid, {
+      fetchLinks: [
+        "authors.author_name",
+        "authors.author_image",
+        "authors.description",
+      ],
+    })) || {};
 
   const recentPosts =
     (await Client().query(Prismic.Predicates.at("document.type", "post"), {
@@ -544,6 +575,10 @@ export async function getStaticProps({
       ...(ref ? { ref } : null),
     })) || {};
 
+  const authors =
+    (await Client().query(Prismic.Predicates.at("document.type", "authors"))) ||
+    {};
+
   return {
     props: {
       uid,
@@ -553,6 +588,7 @@ export async function getStaticProps({
       doc,
       categories,
       recentPosts,
+      authors,
     },
   };
 }

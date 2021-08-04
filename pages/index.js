@@ -77,7 +77,9 @@ const Home = ({ doc, posts, slides, pages }) => {
                             className="categorie"
                             style={{ color: "white" }}
                           >
-                            {categoryName.category.slug}
+                            {categoryName.category.slug !== "-"
+                              ? categoryName.category.slug
+                              : "Uncategorized"}
                           </a>
                         ))}
                         <h2>
