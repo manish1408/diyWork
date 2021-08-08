@@ -50,13 +50,21 @@ const Home = ({ doc, posts, slides, pages }) => {
       <DefaultLayout>
         <Head>
           <title>{RichText.asText(doc.data.headline)}</title>
-          <meta name="title" content="DIY Projects, Science experiments, and Ideas for makers" />
-          <meta name="description" content="Thousands of free DIY projects, science experiments, and Ideas for Makers on DIY diywork.net" />
-          <meta name="keywords" content="free science projects,  DIY projects, DIY Ideas, science experiments" />
+          <meta
+            name="title"
+            content="DIY Projects, Science experiments, and Ideas for makers"
+          />
+          <meta
+            name="description"
+            content="Thousands of free DIY projects, science experiments, and Ideas for Makers on DIY diywork.net"
+          />
+          <meta
+            name="keywords"
+            content="free science projects,  DIY projects, DIY Ideas, science experiments"
+          />
           <meta name="robots" content="index, follow" />
           <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
           <meta name="language" content="English"></meta>
-
         </Head>
         <Header
           logoLight={doc.data.logolight}
@@ -73,6 +81,7 @@ const Home = ({ doc, posts, slides, pages }) => {
                   className="hero d-flex align-items-center  "
                   style={{
                     backgroundImage: "url(" + slide.data.imagelarge.url + ")",
+                    justifyContent: "center",
                   }}
                 >
                   <div className="row">
