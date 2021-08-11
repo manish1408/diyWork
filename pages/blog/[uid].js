@@ -16,7 +16,12 @@ import { postStyles } from "styles";
 import PostDate from "../../components/home/PostList/PostDate";
 import { Header, Footer } from "components/home";
 import Link from "next/link";
-import { hrefResolverCat, linkResolverCat } from "../../prismic-configuration";
+import {
+  hrefResolverAuthor,
+  hrefResolverCat,
+  linkResolverAuthor,
+  linkResolverCat,
+} from "../../prismic-configuration";
 // import CommentsComponent from "../../components/CommentsComponent";
 import Comments from "../../components/Comments";
 import { useState, useEffect } from "react";
@@ -31,8 +36,16 @@ import firebase from "firebase";
  * Post page component
  */
 
-const Post = ({ post, doc, postList, recentPosts, categories, uid }) => {
-  // console.log(post);
+const Post = ({
+  post,
+  doc,
+  postList,
+  recentPosts,
+  categories,
+  uid,
+  authors,
+}) => {
+  //console.log(post);
   if (post && post.data) {
     const hasTitle = RichText.asText(post.data.title).length !== 0;
     const title = hasTitle ? RichText.asText(post.data.title) : "Untitled";
@@ -87,7 +100,7 @@ const Post = ({ post, doc, postList, recentPosts, categories, uid }) => {
             }
           });
       }
-    }, [user]);
+    }, [updateduid]);
 
     const increment = firebase.firestore.FieldValue.increment(1);
     const decrement = firebase.firestore.FieldValue.increment(-1);
@@ -132,13 +145,27 @@ const Post = ({ post, doc, postList, recentPosts, categories, uid }) => {
       }
     };
 
+    const alertMessage = () => {
+      alert("Please sign in first");
+    };
+
+    //console.log(post);
     return (
       <DefaultLayout>
         <Head>
           <title>{title}</title>
-          <meta name="title" content="DIY Projects, Science experiments, and Ideas for makers" />
-          <meta name="description" content="Thousands of free DIY projects, science experiments, and Ideas for Makers on DIY diywork.net" />
-          <meta name="keywords" content="free science projects,  DIY projects, DIY Ideas, science experiments" />
+          <meta
+            name="title"
+            content="DIY Projects, Science experiments, and Ideas for makers"
+          />
+          <meta
+            name="description"
+            content="Thousands of free DIY projects, science experiments, and Ideas for Makers on DIY diywork.net"
+          />
+          <meta
+            name="keywords"
+            content="free science projects,  DIY projects, DIY Ideas, science experiments"
+          />
           <meta name="robots" content="index, follow" />
           <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
           <meta name="language" content="English"></meta>
@@ -178,30 +205,43 @@ const Post = ({ post, doc, postList, recentPosts, categories, uid }) => {
                     <div className="post-single-info">
                       <ul className="list-inline">
                         <li>
-                          <a href="author.html">
-                            <img src={post.data.authorimage.url} alt="Image" />
-                          </a>
+                          <Link
+                            as={linkResolverAuthor(post.data.author)}
+                            href={hrefResolverAuthor(post.data.author)}
+                          >
+                            <a>
+                              <img
+                                src={post.data.author.data.author_image.url}
+                                alt="Image"
+                              />
+                            </a>
+                          </Link>
                         </li>
                         <li>
-                          <a href="author.html">
-                            {post.data.authorname[0].text}
-                          </a>{" "}
+                          <Link
+                            as={linkResolverAuthor(post.data.author)}
+                            href={hrefResolverAuthor(post.data.author)}
+                          >
+                            <a>{post.data.author.data.author_name[0].text}</a>
+                          </Link>
                         </li>
                         <li className="dot" />
                         <li>
                           <PostDate date={post.data.date} />
                         </li>
-                        <li className="blog_heart_counter">
-                          <span>
-                            {likeData === null ? "0" : likeData.likes}
-                          </span>
-                        </li>
-                        <li className="blog_heart">
-                          <div
-                            onClick={handleSubmit}
-                            className={likeclass}
-                          ></div>
-                        </li>
+                        <>
+                          <li className="blog_heart_counter">
+                            <span>
+                              {likeData === null ? "0" : likeData.likes}
+                            </span>
+                          </li>
+                          <li className="blog_heart">
+                            <div
+                              onClick={user ? handleSubmit : alertMessage}
+                              className={likeclass}
+                            ></div>
+                          </li>
+                        </>
                       </ul>
                     </div>
                   </div>
@@ -529,7 +569,13 @@ export async function getStaticProps({
   const doc =
     (await Client().getSingle("blog_home", ref ? { ref } : null)) || {};
   const post =
-    (await Client().getByUID("post", params.uid, ref ? { ref } : null)) || {};
+    (await Client().getByUID("post", params.uid, {
+      fetchLinks: [
+        "authors.author_name",
+        "authors.author_image",
+        "authors.description",
+      ],
+    })) || {};
 
   const recentPosts =
     (await Client().query(Prismic.Predicates.at("document.type", "post"), {
@@ -546,9 +592,13 @@ export async function getStaticProps({
     (await Client().query(Prismic.Predicates.at("document.type", "post"), {
       pageSize: 2,
       after: `${post.id}`,
-      orderings: "[my.post.date]",
+      orderings: "[my.post.date desc]",
       ...(ref ? { ref } : null),
     })) || {};
+
+  const authors =
+    (await Client().query(Prismic.Predicates.at("document.type", "authors"))) ||
+    {};
 
   return {
     props: {
@@ -559,6 +609,7 @@ export async function getStaticProps({
       doc,
       categories,
       recentPosts,
+      authors,
     },
   };
 }

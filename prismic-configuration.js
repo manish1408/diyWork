@@ -38,3 +38,18 @@ export const hrefResolverCat = (doc) => {
   }
   return "/";
 };
+
+export const linkResolverAuthor = (doc) => {
+  if (doc) {
+    return `/authors/${doc.uid}`;
+  }
+  return "/";
+};
+
+// Additional helper function for Next/Link components
+export const hrefResolverAuthor = (doc) => {
+  if (doc) {
+    return "/authors/[author]";
+  }
+  return "/";
+};

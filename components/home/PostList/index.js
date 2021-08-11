@@ -13,6 +13,7 @@ const PostList = ({ posts, pages }) => {
   //   // element in this array. see: https://reactjs.org/docs/lists-and-keys.html
   //   rows.push(<ObjectRow key={i} />);
   // }
+  //console.log(posts);
   return (
     <>
       <div className="col-lg-12">

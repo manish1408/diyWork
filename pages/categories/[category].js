@@ -20,7 +20,8 @@ import Prismic from "@prismicio/client";
 import PostDate from "../../components/home/PostList/PostDate";
 import Header from "../../components/home/Header";
 import ReactPaginate from "react-paginate";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
+import router from "next/router";
 
 // import { hrefResolver, linkResolver } from "prismic-configuration";
 
@@ -31,6 +32,7 @@ const Category = ({ posts, category, data, doc }) => {
   // console.log(data);
   // console.log(category);
   // console.log(posts);
+  const router = useRouter();
   if (posts) {
     return (
       <DefaultLayout>
@@ -69,7 +71,7 @@ const Category = ({ posts, category, data, doc }) => {
                 <div className="pagination mt-30 back_button">
                   <ul className="list-inline">
                     <li>
-                      <a onClick={() => Router.back()}>
+                      <a onClick={() => router.back()}>
                         <i className="arrow_carrot-2left"></i>
                       </a>
                     </li>

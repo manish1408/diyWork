@@ -26,6 +26,13 @@ export const queryCategories = async () => {
   return categories.results;
 };
 
+export const queryAuthors = async () => {
+  const authors =
+    (await Client().query(Prismic.Predicates.at("document.type", "authors"))) ||
+    {};
+  return authors.results;
+};
+
 export const homePageQuery = async () => {
   const allRoutes = await fetchDocs();
   return allRoutes.filter((doc) => doc.type === "post").slice(0, 5);
