@@ -10,6 +10,7 @@
     "bootstrap": "^5.0.1",
     "firebase": "^8.6.7",
     "next": "^9.1.4",
+    "next-sitemap": "^1.6.168",
     "prismic-reactjs": "^1.1.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
@@ -20,7 +21,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "postbuild": "next-sitemap"
+
   },
   "repository": {
     "type": "git",
