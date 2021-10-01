@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://diywork.net
+
+# Sitemaps
+Sitemap: https://diywork.net/sitemap.xml

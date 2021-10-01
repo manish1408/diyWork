@@ -48,7 +48,11 @@ const Post = ({
   //console.log(post);
   if (post && post.data) {
     const hasTitle = RichText.asText(post.data.title).length !== 0;
-    const title = hasTitle ? RichText.asText(post.data.title) : "Untitled";
+    const title = hasTitle ? RichText.asText(post.data.title) + ': DiyWork.net' : "Untitled";
+    const pageurl = "https://www.diywork.net/blog/" + post.uid;
+    const pageDescription = RichText.asText(post.data.description) || title;
+    let pageKeywords = RichText.asText(post.data.keywords) || title;;
+
 
     function getId(url) {
       const regExp =
@@ -150,25 +154,39 @@ const Post = ({
     };
 
     //console.log(post);
+
+
+
+
     return (
       <DefaultLayout>
+
+        
         <Head>
           <title>{title}</title>
-          <meta
-            name="title"
-            content="DIY Projects, Science experiments, and Ideas for makers"
-          />
-          <meta
-            name="description"
-            content="Thousands of free DIY projects, science experiments, and Ideas for Makers on DIY diywork.net"
-          />
-          <meta
-            name="keywords"
-            content="free science projects,  DIY projects, DIY Ideas, science experiments"
-          />
+
+          <meta name="title" content={title} />
+          <meta name="description" content={pageDescription} />
+          <meta name="keywords" content={pageKeywords} />
           <meta name="robots" content="index, follow" />
           <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-          <meta name="language" content="English"></meta>
+          <meta name="language" content="English" />
+
+
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content={pageurl} />
+          <meta property="og:title" content={title} />
+          <meta property="og:description" content={pageDescription} />
+          {/* <meta property="og:image" content={postList.results[0].data.imagepreview.url} />
+
+          <meta property="twitter:card" content={postList.results[0].data.imagepreview.url} /> */}
+          <meta property="twitter:url" content={pageurl} />
+          <meta property="twitter:title" content={title} />
+          <meta property="twitter:description" content={pageDescription} />
+          {/* <meta property="twitter:image" content={postList.results[0].data.imagepreview.url} /> */}
+
+
+
         </Head>
 
         <Header
