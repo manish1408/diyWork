@@ -9,14 +9,17 @@ import DefaultLayout from "layouts";
 import { Header, Footer, PostList, SetupRepo } from "components/home";
 import { Client } from "utils/prismicHelpers";
 import ReactPaginate from "react-paginate";
+import Loader from "components/Loader";
 
 /**
  * Homepage component
  */
 const Home = ({ doc, posts, slides, pages }) => {
   const [otherPage, setOtherPage] = useState(posts);
+  const [loader, setloader] = useState(false);
 
   const pagginationHandler = (page) => {
+    setloader(true);
     const pageNumber = page.selected + 1;
     Client()
       .query(Prismic.Predicates.at("document.type", "post"), {
@@ -25,6 +28,7 @@ const Home = ({ doc, posts, slides, pages }) => {
       })
       .then((response) => {
         setOtherPage(response.results);
+        setloader(false);
       });
   };
 
@@ -113,7 +117,8 @@ const Home = ({ doc, posts, slides, pages }) => {
         <section className="masonry-layout col2-layout mt-30">
           <div className="container-fluid">
             <div className="row">
-              <PostList posts={otherPage} />
+              {loader ? <Loader /> : <PostList posts={otherPage} />}
+
               {/*pagination*/}
 
               <div className="col-lg-12">
