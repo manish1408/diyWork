@@ -55,11 +55,14 @@ const Post = ({
 
 
     function getId(url) {
-      const regExp =
-        /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-      const match = url.match(regExp);
+      if (url) {
+        const regExp =
+          /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+        const match = url.match(regExp);
 
-      return match && match[2].length === 11 ? match[2] : null; 
+        return match && match[2].length === 11 ? match[2] : null;
+      }
+      return false;
     }
 
     const videoId = getId(post.data.video_url.embed_url);
@@ -161,7 +164,7 @@ const Post = ({
     return (
       <DefaultLayout>
 
-        
+
         <Head>
           <title>{title}</title>
 
@@ -222,27 +225,34 @@ const Post = ({
 
                     <div className="post-single-info">
                       <ul className="list-inline">
-                        <li>
-                          <Link
-                            as={linkResolverAuthor(post.data.author)}
-                            href={hrefResolverAuthor(post.data.author)}
-                          >
-                            <a>
-                              <img
-                                src={post.data.author.data.author_image.url}
-                                alt="Image"
-                              />
-                            </a>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link
-                            as={linkResolverAuthor(post.data.author)}
-                            href={hrefResolverAuthor(post.data.author)}
-                          >
-                            <a>{post.data.author.data.author_name[0].text}</a>
-                          </Link>
-                        </li>
+                        {
+                          post.data.author && post.data.author.data && (
+                            <li>
+                              <Link
+                                as={linkResolverAuthor(post.data.author)}
+                                href={hrefResolverAuthor(post.data.author)}
+                              >
+                                <a>
+                                  <img
+                                    src={post.data.author.data.author_image.url}
+                                    alt="Image"
+                                  />
+                                </a>
+                              </Link>
+                            </li>
+                          )
+                        }
+                        {
+                          post.data.author && post.data.author.data && (
+                            <li>
+                              <Link
+                                as={linkResolverAuthor(post.data.author)}
+                                href={hrefResolverAuthor(post.data.author)}>
+                                <a>{post.data.author.data.author_name[0].text}</a>
+                              </Link>
+                            </li>
+                          )
+                        }
                         <li className="dot" />
                         <li>
                           <PostDate date={post.data.date} />

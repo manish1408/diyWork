@@ -23,11 +23,10 @@
     "build": "next build",
     "start": "next start",
     "postbuild": "next-sitemap"
-
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/manish1408/diyWork",
-    "version": "1.1.2"
+    "version": "1.1.4"
   }
 }
